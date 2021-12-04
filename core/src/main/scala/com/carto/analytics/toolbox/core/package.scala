@@ -16,7 +16,7 @@
 
 package com.carto.analytics.toolbox
 
-import com.azavea.hiveless.serializers.{HSerializer, UnaryDeserializer}
+import com.azavea.hiveless.serializers.{HConverter, HSerializer, UnaryDeserializer}
 import cats.Id
 import org.locationtech.jts.geom.Geometry
 import org.apache.spark.sql.jts.GeometryUDT
@@ -24,9 +24,12 @@ import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.types.DataType
 
 package object core extends Serializable {
-  implicit def geometryUnaryDeserializer[T <: Geometry]: UnaryDeserializer[Id, T] =
-    (arguments, inspectors) =>
-      GeometryUDT.deserialize(UnaryDeserializer.internalRowUnaryDeserializer.deserialize(arguments, inspectors)).asInstanceOf[T]
+  implicit def geometryConverter[T <: Geometry]: HConverter[T] = new HConverter[T] {
+    def convert(argument: Any): T = GeometryUDT.deserialize(argument).asInstanceOf[T]
+  }
+
+  implicit def geometryUnaryDeserializer[T <: Geometry: HConverter]: UnaryDeserializer[Id, T] =
+    (arguments, inspectors) => HConverter[T].convert(UnaryDeserializer[Id, InternalRow].deserialize(arguments, inspectors))
 
   implicit def geometrySerializer[T <: Geometry]: HSerializer[T] = new HSerializer[T] {
     def dataType: DataType                 = GeometryUDT

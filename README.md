@@ -4,18 +4,18 @@
 [![Maven Badge](https://img.shields.io/maven-central/v/com.carto.analytics-toolbox/core_2.12?color=blue)](https://search.maven.org/search?q=g:com.carto.analytics-toolbox%20and%20core)
 [![Snapshots Badge](https://img.shields.io/nexus/s/https/oss.sonatype.org/com.carto.analytics-toolbox/core_2.12)](https://oss.sonatype.org/content/repositories/snapshots/com/carto/analytics-toolbox/core_2.12/)
 
-This project is based on [Hiveless](https://github.com/azavea/hiveless) is a Scala library for working with [Spark](https://spark.apache.org/) and [Hive](https://hive.apache.org/) using a more expressive typed API.
+CARTO Analytics Toolbox for Databricks provides geospatial functionality leveraging the Geomesa SparkSQL capabilities.
 
-It adds typed HiveUDFs and implements Spatial Hive UDFs. It consists of the following modules:
+It implements Spatial Hive UDFs and consists of the following modules:
 
-* `core` with Hive GIS UDFs (depends on [GeoMesa](https://github.com/locationtech/geomesa))
+* `core` with Hive GIS UDFs (depends on [GeoMesa](https://github.com/locationtech/geomesa) and [Hiveless](https://github.com/azavea/hiveless))
 
 ## Get started
 
 ```scala
 resolvers ++= Seq(
   Resolver.sonatypeRepo("releases"),
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("snapshots") // for snapshot artifacts
 )
 
 libraryDependencies ++= Seq(
@@ -32,6 +32,7 @@ CREATE OR REPLACE FUNCTION st_asGeoJson AS 'com.carto.analytics.toolbox.core.ST_
 CREATE OR REPLACE FUNCTION st_asLatLonText AS 'com.carto.analytics.toolbox.core.ST_AsLatLonText';
 CREATE OR REPLACE FUNCTION st_asText AS 'com.carto.analytics.toolbox.core.ST_AsText';
 CREATE OR REPLACE FUNCTION st_centroid AS 'com.carto.analytics.toolbox.core.ST_Centroid';
+CREATE OR REPLACE FUNCTION st_convexHull AS 'com.carto.analytics.toolbox.core.ST_ConvexHull';
 CREATE OR REPLACE FUNCTION st_contains AS 'com.carto.analytics.toolbox.core.ST_Contains';
 CREATE OR REPLACE FUNCTION st_covers AS 'com.carto.analytics.toolbox.core.ST_Covers';
 CREATE OR REPLACE FUNCTION st_crosses AS 'com.carto.analytics.toolbox.core.ST_Crosses';
