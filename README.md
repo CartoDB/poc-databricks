@@ -24,39 +24,13 @@ libraryDependencies ++= Seq(
 ## Supported GIS functions (core)
 
 ```sql
-CREATE OR REPLACE FUNCTION st_area AS 'com.carto.analytics.toolbox.core.ST_Area';
-CREATE OR REPLACE FUNCTION st_asBinary AS 'com.carto.analytics.toolbox.core.ST_AsBinary';
-CREATE OR REPLACE FUNCTION st_asGeoJson AS 'com.carto.analytics.toolbox.core.ST_AsGeoJson';
-CREATE OR REPLACE FUNCTION st_asLatLonText AS 'com.carto.analytics.toolbox.core.ST_AsLatLonText';
-CREATE OR REPLACE FUNCTION st_asText AS 'com.carto.analytics.toolbox.core.ST_AsText';
-CREATE OR REPLACE FUNCTION st_centroid AS 'com.carto.analytics.toolbox.core.ST_Centroid';
-CREATE OR REPLACE FUNCTION st_convexHull AS 'com.carto.analytics.toolbox.core.ST_ConvexHull';
-CREATE OR REPLACE FUNCTION st_contains AS 'com.carto.analytics.toolbox.core.ST_Contains';
-CREATE OR REPLACE FUNCTION st_covers AS 'com.carto.analytics.toolbox.core.ST_Covers';
-CREATE OR REPLACE FUNCTION st_crosses AS 'com.carto.analytics.toolbox.core.ST_Crosses';
-CREATE OR REPLACE FUNCTION st_difference AS 'com.carto.analytics.toolbox.core.ST_Difference';
-CREATE OR REPLACE FUNCTION st_disjoint AS 'com.carto.analytics.toolbox.core.ST_Disjoint';
-CREATE OR REPLACE FUNCTION st_equals AS 'com.carto.analytics.toolbox.core.ST_Equals';
-CREATE OR REPLACE FUNCTION st_exteriorRing AS 'com.carto.analytics.toolbox.core.ST_ExteriorRing';
-CREATE OR REPLACE FUNCTION st_geoHash AS 'com.carto.analytics.toolbox.core.ST_GeoHash';
-CREATE OR REPLACE FUNCTION st_geomFromWKB AS 'com.carto.analytics.toolbox.core.ST_GeomFromWKB';
-CREATE OR REPLACE FUNCTION st_geomFromWKT AS 'com.carto.analytics.toolbox.core.ST_GeomFromWKT';
-CREATE OR REPLACE FUNCTION st_intersection AS 'com.carto.analytics.toolbox.core.ST_Intersection';
-CREATE OR REPLACE FUNCTION st_intersects AS 'com.carto.analytics.toolbox.core.ST_Intersects';
-CREATE OR REPLACE FUNCTION st_isGeomField AS 'com.carto.analytics.toolbox.core.ST_IsGeomField';
-CREATE OR REPLACE FUNCTION st_makeBBOX AS 'com.carto.analytics.toolbox.core.ST_MakeBBOX';
-CREATE OR REPLACE FUNCTION st_makeLine AS 'com.carto.analytics.toolbox.core.ST_MakeLine';
-CREATE OR REPLACE FUNCTION st_numGeometries AS 'com.carto.analytics.toolbox.core.ST_NumGeometries';
-CREATE OR REPLACE FUNCTION st_numPoints AS 'com.carto.analytics.toolbox.core.ST_NumPoints';
-CREATE OR REPLACE FUNCTION st_overlaps AS 'com.carto.analytics.toolbox.core.ST_Overlaps';
-CREATE OR REPLACE FUNCTION st_pointFromWKB AS 'com.carto.analytics.toolbox.core.ST_PointFromWKB';
-CREATE OR REPLACE FUNCTION st_simplify AS 'com.carto.analytics.toolbox.core.ST_Simplify';
-CREATE OR REPLACE FUNCTION st_simplifyPreserveTopology AS 'com.carto.analytics.toolbox.core.ST_SimplifyPreserveTopology';
-CREATE OR REPLACE FUNCTION st_touches AS 'com.carto.analytics.toolbox.core.ST_Touches';
-CREATE OR REPLACE FUNCTION st_within AS 'com.carto.analytics.toolbox.core.ST_Within';
-CREATE OR REPLACE FUNCTION st_x AS 'com.carto.analytics.toolbox.core.ST_X';
-CREATE OR REPLACE FUNCTION st_y AS 'com.carto.analytics.toolbox.core.ST_Y';
+CREATE OR REPLACE FUNCTION st_geometryFromText as 'com.carto.analytics.toolbox.core.ST_GeomFromWKT';
+CREATE OR REPLACE FUNCTION st_intersects as 'com.carto.analytics.toolbox.core.ST_Intersects';
+CREATE OR REPLACE FUNCTION st_simplify as 'com.carto.analytics.toolbox.core.ST_Simplify';
+ -- ...and more
 ```
+
+The full list of supported functions can be found [here](./core/sql/createUDFs.sql).
 
 ## License
 Code is provided under the Apache 2.0 license available at http://opensource.org/licenses/Apache-2.0,
