@@ -19,8 +19,8 @@ lazy val commonSettings = Seq(
     "-target:jvm-1.8" // ,
     // "-Xsource:3"
   ),
-  licenses               := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
-  homepage               := Some(url("https://github.com/azavea/hiveless")),
+  licenses               := Seq("BSD-3-Clause" -> url("https://github.com/CartoDB/analytics-toolbox-databricks/blob/master/LICENSE")),
+  homepage               := Some(url("https://github.com/CartoDB/analytics-toolbox-databricks")),
   versionScheme          := Some("semver-spec"),
   Test / publishArtifact := false,
   developers := List(
