@@ -41,12 +41,15 @@ lazy val commonSettings = Seq(
       }
     )
   ),
-  resolvers += Resolver.sonatypeRepo("snapshots")
+  resolvers += "oss-snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+  sonatypeProfileName := "com.carto",
+  sonatypeCredentialHost := "s01.oss.sonatype.org",
+  sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 )
 
 lazy val root = (project in file("."))
   .settings(commonSettings)
-  .settings(name := "analytics-toolbox")
+  .settings(name := "analyticstoolbox")
   .settings(
     scalaVersion       := scalaVersions.head,
     crossScalaVersions := Nil,
