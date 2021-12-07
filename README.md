@@ -1,7 +1,7 @@
 # Carto Analytics Toolbox
 
 [![CI](https://github.com/cartodb/analytics-toolbox-databricks/actions/workflows/ci.yml/badge.svg)](https://github.com/cartodb/analytics-toolbox-databricks/actions/workflows/ci.yml)
-[![Maven Badge](https://img.shields.io/maven-central/v/com.carto.analytics-toolbox/core_2.12?color=blue)](https://search.maven.org/search?q=g:com.carto.analyticstoolbox%20and%20core)
+[![Maven Badge](https://img.shields.io/maven-central/v/com.carto.analyticstoolbox/core_2.12?color=blue)](https://search.maven.org/search?q=g:com.carto.analyticstoolbox%20and%20core)
 [![Snapshots Badge](https://img.shields.io/nexus/s/https/s01.oss.sonatype.org/com.carto.analyticstoolbox/core_2.12)](https://s01.oss.sonatype.org/content/repositories/snapshots/com/carto/analyticstoolbox/core_2.12/)
 
 CARTO Analytics Toolbox for Databricks provides geospatial functionality leveraging the Geomesa SparkSQL capabilities. It implements Spatial Hive UDFs and consists of the following modules:
