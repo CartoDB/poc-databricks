@@ -24,9 +24,9 @@ libraryDependencies ++= Seq(
 ## Supported GIS functions (core)
 
 ```sql
-CREATE OR REPLACE FUNCTION st_geometryFromText as 'com.carto.analytics.toolbox.core.ST_GeomFromWKT';
-CREATE OR REPLACE FUNCTION st_intersects as 'com.carto.analytics.toolbox.core.ST_Intersects';
-CREATE OR REPLACE FUNCTION st_simplify as 'com.carto.analytics.toolbox.core.ST_Simplify';
+CREATE OR REPLACE FUNCTION st_geometryFromText as 'com.carto.analyticstoolbox.core.ST_GeomFromWKT';
+CREATE OR REPLACE FUNCTION st_intersects as 'com.carto.analyticstoolbox.core.ST_Intersects';
+CREATE OR REPLACE FUNCTION st_simplify as 'com.carto.analyticstoolbox.core.ST_Simplify';
  -- ...and more
 ```
 

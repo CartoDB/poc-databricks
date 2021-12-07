@@ -31,7 +31,6 @@ lazy val commonSettings = Seq(
       url("https://github.com/pomadchin")
     )
   ),
-  headerLicense := Some(HeaderLicense.ALv2(Year.now.getValue.toString, "Azavea")),
   headerMappings := Map(
     FileType.scala -> CommentStyle.cStyleBlockComment.copy(
       commentCreator = { (text, existingText) =>
@@ -68,6 +67,7 @@ lazy val core = project
       "org.apache.spark"         %% "spark-hive"        % "3.1.2"  % Provided,
       "org.scalatest"            %% "scalatest"         % "3.2.10" % Test
     ),
+    headerLicense := Some(HeaderLicense.ALv2(Year.now.getValue.toString, "Azavea")),
     assembly / test := {},
     assembly / assemblyShadeRules := {
       val shadePackage = "com.carto.analytics.hiveless"
