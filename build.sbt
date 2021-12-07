@@ -40,6 +40,7 @@ lazy val commonSettings = Seq(
       }
     )
   ),
+  // resolver for hiveless SNAPSHOT dependencies
   resolvers += "oss-snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   sonatypeProfileName := "com.carto",
   sonatypeCredentialHost := "s01.oss.sonatype.org",
@@ -62,7 +63,7 @@ lazy val core = project
   .settings(name := "core")
   .settings(
     libraryDependencies ++= Seq(
-      "com.azavea"               %% "hiveless-core"     % "0.0.0+50-2380a4be-SNAPSHOT",
+      "com.azavea"               %% "hiveless-core"     % "0.0.0+51-57ca3267-SNAPSHOT",
       "org.locationtech.geomesa" %% "geomesa-spark-jts" % "3.3.0",
       "org.apache.spark"         %% "spark-hive"        % "3.1.2"  % Provided,
       "org.scalatest"            %% "scalatest"         % "3.2.10" % Test
