@@ -6,7 +6,7 @@ val scalaVersions = Seq("2.12.15")
 lazy val commonSettings = Seq(
   scalaVersion       := scalaVersions.head,
   crossScalaVersions := scalaVersions,
-  organization       := "com.carto.analytics-toolbox",
+  organization       := "com.carto.analyticstoolbox",
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
