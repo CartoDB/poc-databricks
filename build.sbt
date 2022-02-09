@@ -63,10 +63,10 @@ lazy val core = project
   .settings(name := "core")
   .settings(
     libraryDependencies ++= Seq(
-      "com.azavea"               %% "hiveless-core"     % "0.0.1",
+      "com.azavea"               %% "hiveless-core"     % "0.0.1+5-978febc6-SNAPSHOT",
       "org.locationtech.geomesa" %% "geomesa-spark-jts" % "3.3.0",
       "org.apache.spark"         %% "spark-hive"        % "3.1.2"  % Provided,
-      "org.scalatest"            %% "scalatest"         % "3.2.10" % Test
+      "org.scalatest"            %% "scalatest"         % "3.2.11" % Test
     ),
     headerLicense := Some(HeaderLicense.ALv2(Year.now.getValue.toString, "Azavea")),
     assembly / test := {},
