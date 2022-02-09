@@ -63,7 +63,7 @@ lazy val core = project
   .settings(name := "core")
   .settings(
     libraryDependencies ++= Seq(
-      "com.azavea"               %% "hiveless-core"     % "0.0.1+5-978febc6-SNAPSHOT",
+      "com.azavea"               %% "hiveless-core"     % "0.0.2",
       "org.locationtech.geomesa" %% "geomesa-spark-jts" % "3.3.0",
       "org.apache.spark"         %% "spark-hive"        % "3.1.2"  % Provided,
       "org.scalatest"            %% "scalatest"         % "3.2.11" % Test
