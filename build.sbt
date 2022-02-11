@@ -3,6 +3,9 @@ import java.time.Year
 
 val scalaVersions = Seq("2.12.15")
 
+// https://github.com/xerial/sbt-sonatype/issues/276
+ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
+
 lazy val commonSettings = Seq(
   scalaVersion       := scalaVersions.head,
   crossScalaVersions := scalaVersions,
