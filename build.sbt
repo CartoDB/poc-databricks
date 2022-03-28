@@ -45,9 +45,9 @@ lazy val commonSettings = Seq(
   ),
   // resolver for hiveless SNAPSHOT dependencies
   resolvers += "oss-snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
-  sonatypeProfileName := "com.carto",
+  sonatypeProfileName    := "com.carto",
   sonatypeCredentialHost := "s01.oss.sonatype.org",
-  sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
+  sonatypeRepository     := "https://s01.oss.sonatype.org/service/local"
 )
 
 lazy val root = (project in file("."))
@@ -66,12 +66,11 @@ lazy val core = project
   .settings(name := "core")
   .settings(
     libraryDependencies ++= Seq(
-      "com.azavea"               %% "hiveless-core"     % "0.0.2",
-      "org.locationtech.geomesa" %% "geomesa-spark-jts" % "3.3.0",
-      "org.apache.spark"         %% "spark-hive"        % "3.1.2"  % Provided,
-      "org.scalatest"            %% "scalatest"         % "3.2.11" % Test
+      "com.azavea"       %% "hiveless-spatial-index" % "0.0.2+1-38c6fc54-SNAPSHOT",
+      "org.apache.spark" %% "spark-hive"             % "3.1.2"  % Provided,
+      "org.scalatest"    %% "scalatest"              % "3.2.11" % Test
     ),
-    headerLicense := Some(HeaderLicense.ALv2(Year.now.getValue.toString, "Azavea")),
+    headerLicense   := Some(HeaderLicense.ALv2(Year.now.getValue.toString, "Azavea")),
     assembly / test := {},
     assembly / assemblyShadeRules := {
       val shadePackage = "com.carto.analytics.hiveless"

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Azavea
+ * Copyright 2022 Azavea
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package com.carto.analyticstoolbox.core
+package com.carto.analyticstoolbox.index
+
+import com.carto.analyticstoolbox.core._
 
 import com.azavea.hiveless.HUDF
 import com.azavea.hiveless.implicits.tupler._
-import org.locationtech.geomesa.spark.jts.udf.SpatialRelationFunctions
+import geotrellis.proj4.CRS
+import geotrellis.vector._
 import org.locationtech.jts.geom.Geometry
 
-import java.{lang => jl}
-
-class ST_Crosses extends HUDF[(Geometry, Geometry), jl.Boolean] {
-  val name: String = "st_crosses"
-  def function     = SpatialRelationFunctions.ST_Crosses
+class ST_GeomReproject extends HUDF[(Geometry, CRS, CRS), Geometry] {
+  val name: String = "st_geomReproject"
+  def function     = { (geom: Geometry, from: CRS, to: CRS) => geom.reproject(from, to) }
 }

@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package com.carto.analyticstoolbox.core
+package com.carto.analyticstoolbox.index
 
 import com.azavea.hiveless.HUDF
 import com.azavea.hiveless.implicits.tupler._
-import org.locationtech.geomesa.spark.jts.udf.SpatialRelationFunctions
-import org.locationtech.jts.geom.Geometry
+import geotrellis.vector._
 
-import java.{lang => jl}
-
-class ST_Crosses extends HUDF[(Geometry, Geometry), jl.Boolean] {
-  val name: String = "st_crosses"
-  def function     = SpatialRelationFunctions.ST_Crosses
+class ST_IntersectsExtents extends HUDF[(Extent, Extent), Boolean] {
+  val name: String = "st_intersectsExtents"
+  def function     = { (e1: Extent, e2: Extent) => e1.intersects(e2) }
 }

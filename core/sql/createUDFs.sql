@@ -75,3 +75,12 @@ CREATE OR REPLACE FUNCTION st_translate as 'com.carto.analyticstoolbox.core.ST_T
 CREATE OR REPLACE FUNCTION st_within as 'com.carto.analyticstoolbox.core.ST_Within';
 CREATE OR REPLACE FUNCTION st_x as 'com.carto.analyticstoolbox.core.ST_X';
 CREATE OR REPLACE FUNCTION st_y as 'com.carto.analyticstoolbox.core.ST_Y';
+-- indexing functions
+CREATE OR REPLACE FUNCTION st_crsFromText as 'com.carto.analyticstoolbox.index.ST_CrsFromText';
+CREATE OR REPLACE FUNCTION st_extentFromGeom as 'com.carto.analyticstoolbox.index.ST_ExtentFromGeom';
+CREATE OR REPLACE FUNCTION st_extentToGeom as 'com.carto.analyticstoolbox.index.ST_ExtentToGeom';
+CREATE OR REPLACE FUNCTION st_geomReproject as 'com.carto.analyticstoolbox.index.ST_GeomReproject';
+CREATE OR REPLACE FUNCTION st_intersectsExtent as 'com.carto.analyticstoolbox.index.ST_IntersectsExtent';
+CREATE OR REPLACE FUNCTION st_intersectsExtents as 'com.carto.analyticstoolbox.index.ST_IntersectsExtents';
+CREATE OR REPLACE FUNCTION st_partitionCentroid as 'com.carto.analyticstoolbox.index.ST_PartitionCentroid';
+CREATE OR REPLACE FUNCTION st_z2LatLon as 'com.carto.analyticstoolbox.index.ST_Z2LatLon';
