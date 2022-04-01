@@ -16,11 +16,12 @@
 
 package com.carto.analyticstoolbox
 
+import com.carto.analyticstoolbox.spark.geotrellis.encoders.StandardEncoders
+import com.carto.analyticstoolbox.spark.geotrellis.Z2Index
+
 import com.azavea.hiveless.serializers.{HConverter, HSerializer, UnaryDeserializer}
 import com.azavea.hiveless.serializers.syntax._
 import com.azavea.hiveless.spark.encoders.syntax._
-import com.azavea.hiveless.spark.geotrellis.encoders.StandardEncoders
-import com.azavea.hiveless.spark.geotrellis.Z2Index
 import cats.Id
 import geotrellis.proj4.CRS
 import geotrellis.vector.Extent

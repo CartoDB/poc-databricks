@@ -3,6 +3,33 @@ import java.time.Year
 
 val scalaVersions = Seq("2.12.15")
 
+val catsVersion       = "2.7.0"
+val shapelessVersion  = "2.3.3" // to be compatible with Spark 3.1.x
+val scalaTestVersion  = "3.2.11"
+val jtsVersion        = "1.18.1"
+val geomesaVersion    = "3.3.0"
+val hivelessVersion   = "0.0.2+8-452ee344-SNAPSHOT"
+val geotrellisVersion = "3.6.1+9-fdefb1d3-SNAPSHOT"
+
+// GeoTrellis depends on Shapeless 2.3.7
+// To maintain better compat with Spark 3.1.x and DataBricks 9.1 we need to depend on Shapeless 2.3.3
+val excludedDependencies = List(
+  ExclusionRule("com.chuusai", "shapeless_2.12"),
+  ExclusionRule("com.chuusai", "shapeless_2.13")
+)
+
+def ver(for212: String, for213: String) = Def.setting {
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, 12)) => for212
+    case Some((2, 13)) => for213
+    case _             => sys.error("not good")
+  }
+}
+
+def spark(module: String) = Def.setting {
+  "org.apache.spark" %% s"spark-$module" % ver("3.1.3", "3.2.1").value
+}
+
 // https://github.com/xerial/sbt-sonatype/issues/276
 ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 
@@ -34,6 +61,7 @@ lazy val commonSettings = Seq(
       url("https://github.com/pomadchin")
     )
   ),
+  headerLicense := Some(HeaderLicense.ALv2(Year.now.getValue.toString, "Azavea")),
   headerMappings := Map(
     FileType.scala -> CommentStyle.cStyleBlockComment.copy(
       commentCreator = { (text, existingText) =>
@@ -45,6 +73,9 @@ lazy val commonSettings = Seq(
   ),
   // resolver for hiveless SNAPSHOT dependencies
   resolvers += "oss-snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+  addCompilerPlugin("org.typelevel" % "kind-projector" % "0.13.2" cross CrossVersion.full),
+  libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % Test,
+  // sonatype settings
   sonatypeProfileName    := "com.carto",
   sonatypeCredentialHost := "s01.oss.sonatype.org",
   sonatypeRepository     := "https://s01.oss.sonatype.org/service/local"
@@ -66,11 +97,12 @@ lazy val core = project
   .settings(name := "core")
   .settings(
     libraryDependencies ++= Seq(
-      "com.azavea"       %% "hiveless-spatial-index" % "0.0.2+1-38c6fc54-SNAPSHOT",
-      "org.apache.spark" %% "spark-hive"             % "3.1.2"  % Provided,
-      "org.scalatest"    %% "scalatest"              % "3.2.11" % Test
+      "com.azavea"                  %% "hiveless-core"     % hivelessVersion,
+      "com.azavea"                  %% "hiveless-jts"      % hivelessVersion,
+      "org.locationtech.geomesa"    %% "geomesa-spark-jts" % geomesaVersion,
+      "org.locationtech.geotrellis" %% "geotrellis-store"  % geotrellisVersion excludeAll (excludedDependencies: _*),
+      spark("hive").value            % Provided
     ),
-    headerLicense   := Some(HeaderLicense.ALv2(Year.now.getValue.toString, "Azavea")),
     assembly / test := {},
     assembly / assemblyShadeRules := {
       val shadePackage = "com.carto.analytics.hiveless"
