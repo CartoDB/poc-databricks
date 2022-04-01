@@ -5,6 +5,7 @@ CREATE OR REPLACE FUNCTION st_asGeoHash as 'com.carto.analyticstoolbox.core.ST_A
 CREATE OR REPLACE FUNCTION st_asGeoJson as 'com.carto.analyticstoolbox.core.ST_AsGeoJson';
 CREATE OR REPLACE FUNCTION st_asLatLonText as 'com.carto.analyticstoolbox.core.ST_AsLatLonText';
 CREATE OR REPLACE FUNCTION st_asText as 'com.carto.analyticstoolbox.core.ST_AsText';
+CREATE OR REPLACE FUNCTION st_asTWKB as 'com.carto.analyticstoolbox.core.ST_AsTWKB';
 CREATE OR REPLACE FUNCTION st_boundary as 'com.carto.analyticstoolbox.core.ST_Boundary';
 CREATE OR REPLACE FUNCTION st_box2DFromGeoHash as 'com.carto.analyticstoolbox.core.ST_GeomFromGeoHash';
 CREATE OR REPLACE FUNCTION st_bufferPoint as 'com.carto.analyticstoolbox.core.ST_BufferPoint';
