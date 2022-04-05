@@ -8,7 +8,7 @@ CARTO Analytics Toolbox for Databricks provides geospatial functionality leverag
 
 * `core` with Hive GIS UDFs (depends on [GeoMesa](https://github.com/locationtech/geomesa) and [Hiveless](https://github.com/azavea/hiveless))
 
-## Get started
+## Quick Start
 
 ```scala
 resolvers ++= Seq(

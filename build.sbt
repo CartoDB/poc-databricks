@@ -8,8 +8,8 @@ val shapelessVersion  = "2.3.3" // to be compatible with Spark 3.1.x
 val scalaTestVersion  = "3.2.11"
 val jtsVersion        = "1.18.1"
 val geomesaVersion    = "3.3.0"
-val hivelessVersion   = "0.0.2+8-452ee344-SNAPSHOT"
-val geotrellisVersion = "3.6.1+9-fdefb1d3-SNAPSHOT"
+val hivelessVersion   = "0.0.3"
+val geotrellisVersion = "3.6.2"
 
 // GeoTrellis depends on Shapeless 2.3.7
 // To maintain better compat with Spark 3.1.x and DataBricks 9.1 we need to depend on Shapeless 2.3.3
