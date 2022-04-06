@@ -24,26 +24,22 @@ object OptimizeSpatial extends Serializable {
       sourceTable: String,
       outputTable: String,
       outputLocation: String,
-      zoom: Int = 8,
-      blockSize: Int = 20097000,
-      compression: String = "lz4",
-      maxRecordsPerFile: Int = 0
+      zoom: Int,
+      computeBlockSize: String => Long,
+      compression: String,
+      maxRecordsPerFile: Int
   )(implicit ssc: SparkSession): Unit = {
-    // configure the output
-    ssc.sql(s"SET parquet.block.size = $blockSize;")
-    ssc.sql(s"SET spark.sql.parquet.compression.codec=$compression;")
-    // ssc.sql(s"SET spark.sql.files.maxRecordsPerFile=$maxRecordsPerFile;")
-
     // drop tmp views, IF NOT EXISTS is not supported by Spark SQL, that's a DataBricks feature
     // using try catch to capture
     try ssc.sql(s"DROP TABLE ${sourceTable}_idx_view;")
     catch {
-      case e: AnalysisException => e.printStackTrace()
+      case _: AnalysisException => // e.printStackTrace()
     }
 
+    // overwrite the output table
     try ssc.sql(s"DROP TABLE $outputTable;")
     catch {
-      case e: AnalysisException => e.printStackTrace()
+      case _: AnalysisException => // e.printStackTrace()
     }
 
     // view creation
@@ -68,6 +64,12 @@ object OptimizeSpatial extends Serializable {
          |""".stripMargin
     )
 
+    // configure the output
+    val blockSize = computeBlockSize(s"${sourceTable}_idx_view")
+    ssc.sql(s"SET parquet.block.size = $blockSize;")
+    ssc.sql(s"SET spark.sql.parquet.compression.codec=$compression;")
+    ssc.sql(s"SET spark.sql.files.maxRecordsPerFile=$maxRecordsPerFile;")
+
     ssc.sql(
       s"""
          |CREATE TABLE $outputTable
@@ -75,5 +77,34 @@ object OptimizeSpatial extends Serializable {
          |AS (SELECT * FROM ${sourceTable}_idx_view);
          |""".stripMargin
     )
+  }
+
+  /** automatically computes the block size */
+  def auto(
+      sourceTable: String,
+      outputTable: String,
+      outputLocation: String,
+      zoom: Int,
+      blockSizeDefault: Int,
+      compression: String,
+      maxRecordsPerFile: Int
+  )(implicit ssc: SparkSession): Unit =
+    apply(
+      sourceTable,
+      outputTable,
+      outputLocation,
+      zoom,
+      computeBlockSize = t => blockSizeCompute(t, blockSizeDefault),
+      compression,
+      maxRecordsPerFile
+    )
+
+  /** TODO: improve heuristic */
+  def blockSizeCompute(table: String, blockSizeDefault: Int)(implicit ssc: SparkSession): Long = {
+    val df  = ssc.sql(s"SELECT partitioning FROM $table LIMIT 10;")
+    val p   = df.take(1).map(_.getLong(0)).headOption.getOrElse(0)
+    val dfc = ssc.sql(s"SELECT COUNT(*) FROM $table WHERE partitioning = $p;")
+
+    math.max(dfc.head.getLong(0) * 10 / 2, blockSizeDefault)
   }
 }
