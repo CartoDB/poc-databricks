@@ -31,3 +31,26 @@ CREATE OR REPLACE FUNCTION st_simplify as 'com.carto.analyticstoolbox.core.ST_Si
 ```
 
 The full list of supported functions can be found [here](./core/sql/createUDFs.sql).
+
+## Table Optimization
+
+There are two functions defined to help with the raw table preparations; both transform the input table 
+into the intersections query optimized shape; for more details see [OptimizeSpatial.scala](./core/src/main/scala/com/carto/analyticstoolbox/spark/spatial/OptimizeSpatial.scala):
+
+1. **optimizeSpatialAuto**
+   * Uses heuristics to compute the optimal parquet block size
+2. **optimizeSpatial**
+   * Uses the user input to set the output parquet file block size
+
+```scala
+import com.carto.analyticstoolbox.spark.spatial._
+
+val sourceTable: String = ???
+val outputTable: String = ???
+val outputLocation: String = ???
+
+// optimize with the block size computation 
+spark.optimizeSpatialAuto(sourceTable, outputTable, outputLocation)
+// optimize with the user defined block size
+spark.optimizeSpatial(sourceTable, outputTable, outputLocation, blockSize = 20097000)
+```
