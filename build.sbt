@@ -105,7 +105,7 @@ lazy val core = project
     ),
     assembly / test := {},
     assembly / assemblyShadeRules := {
-      val shadePackage = "com.carto.analytics.hiveless"
+      val shadePackage = "com.carto.analytics"
       Seq(
         ShadeRule.rename("shapeless.**" -> s"$shadePackage.shapeless.@1").inAll,
         ShadeRule.rename("cats.kernel.**" -> s"$shadePackage.cats.kernel.@1").inAll
