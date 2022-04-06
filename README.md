@@ -34,7 +34,7 @@ The full list of supported functions can be found [here](./core/sql/createUDFs.s
 
 ## Table Optimization
 
-There are two functions defined to help with the raw table preparations; both transform the input table 
+There are two functions defined to help with the raw table preparations. Both transform the input table 
 into the intersections query optimized shape; for more details see [OptimizeSpatial.scala](./core/src/main/scala/com/carto/analyticstoolbox/spark/spatial/OptimizeSpatial.scala):
 
 1. **optimizeSpatialAuto**
