@@ -32,12 +32,12 @@ class ST_PartitionCentroid extends HUDF[(Geometry, Int, Option[Int], Option[Int]
 
 object ST_PartitionCentroid {
   def function(
-      geom: Geometry,
-      zoom: Int,
-      tileSizeOpt: Option[Int],
-      bitsOpt: Option[Int],
-      crsOpt: Option[CRS],
-      resolutionThresholdOpt: Option[Double]
+    geom: Geometry,
+    zoom: Int,
+    tileSizeOpt: Option[Int],
+    bitsOpt: Option[Int],
+    crsOpt: Option[CRS],
+    resolutionThresholdOpt: Option[Double]
   ): Long = {
     val crs                 = crsOpt.getOrElse(LatLng)
     val tileSize            = tileSizeOpt.getOrElse(ZoomedLayoutScheme.DEFAULT_TILE_SIZE)
