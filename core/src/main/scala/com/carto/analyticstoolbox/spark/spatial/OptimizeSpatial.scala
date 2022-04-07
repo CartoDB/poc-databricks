@@ -16,33 +16,34 @@
 
 package com.carto.analyticstoolbox.spark.spatial
 
-import org.apache.spark.sql.{AnalysisException, SparkSession}
+import org.apache.spark.sql.catalyst.TableIdentifier
+import org.apache.spark.sql.SparkSession
 
 object OptimizeSpatial extends Serializable {
 
   def apply(
-      sourceTable: String,
-      outputTable: String,
-      outputLocation: String,
-      zoom: Int,
-      computeBlockSize: String => Long,
-      compression: String,
-      maxRecordsPerFile: Int
+    sourceTable: String,
+    outputTable: String,
+    outputLocation: String,
+    zoom: Int,
+    computeBlockSize: String => Long,
+    compression: String,
+    maxRecordsPerFile: Int
   )(implicit ssc: SparkSession): Unit = {
     // drop tmp views, IF NOT EXISTS is not supported by Spark SQL, that's a DataBricks feature
     // using try catch to capture
-    try ssc.sql(s"DROP TABLE ${sourceTable}_idx_view;")
-    catch {
-      case _: AnalysisException => // e.printStackTrace()
-    }
+    val catalog = ssc.sessionState.catalog
 
+    catalog.dropTable(TableIdentifier(s"${sourceTable}_idx_view"), ignoreIfNotExists = true, purge = false)
+    catalog.dropTable(TableIdentifier(outputTable), ignoreIfNotExists = true, purge = false)
+
+    // via SQL
+    /*try ssc.sql(s"DROP TABLE ${sourceTable}_idx_view;") catch { case _: AnalysisException => // e.printStackTrace() }
     // overwrite the output table
-    try ssc.sql(s"DROP TABLE $outputTable;")
-    catch {
-      case _: AnalysisException => // e.printStackTrace()
-    }
+    try ssc.sql(s"DROP TABLE $outputTable;") catch { case _: AnalysisException => // e.printStackTrace() }*/
 
     // view creation
+    // SQL definition is easier and more readable
     ssc.sql(
       s"""
          |CREATE TEMPORARY VIEW ${sourceTable}_idx_view AS(
@@ -66,9 +67,15 @@ object OptimizeSpatial extends Serializable {
 
     // configure the output
     val blockSize = computeBlockSize(s"${sourceTable}_idx_view")
-    ssc.sql(s"SET parquet.block.size = $blockSize;")
+    val conf      = ssc.conf
+    conf.set("parquet.block.size", blockSize)
+    conf.set("spark.sql.parquet.compression.codec", compression)
+    conf.set("spark.sql.files.maxRecordsPerFile", maxRecordsPerFile)
+
+    // via SQL
+    /*ssc.sql(s"SET parquet.block.size = $blockSize;")
     ssc.sql(s"SET spark.sql.parquet.compression.codec=$compression;")
-    ssc.sql(s"SET spark.sql.files.maxRecordsPerFile=$maxRecordsPerFile;")
+    ssc.sql(s"SET spark.sql.files.maxRecordsPerFile=$maxRecordsPerFile;")*/
 
     ssc.sql(
       s"""
@@ -81,13 +88,13 @@ object OptimizeSpatial extends Serializable {
 
   /** automatically computes the block size */
   def auto(
-      sourceTable: String,
-      outputTable: String,
-      outputLocation: String,
-      zoom: Int,
-      blockSizeDefault: Int,
-      compression: String,
-      maxRecordsPerFile: Int
+    sourceTable: String,
+    outputTable: String,
+    outputLocation: String,
+    zoom: Int,
+    blockSizeDefault: Int,
+    compression: String,
+    maxRecordsPerFile: Int
   )(implicit ssc: SparkSession): Unit =
     apply(
       sourceTable,
