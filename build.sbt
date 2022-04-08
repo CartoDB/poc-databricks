@@ -97,12 +97,14 @@ lazy val core = project
   .settings(name := "core")
   .settings(
     libraryDependencies ++= Seq(
-      "com.azavea"                  %% "hiveless-core"     % hivelessVersion,
-      "com.azavea"                  %% "hiveless-jts"      % hivelessVersion,
-      "org.locationtech.geomesa"    %% "geomesa-spark-jts" % geomesaVersion,
-      "org.locationtech.geotrellis" %% "geotrellis-store"  % geotrellisVersion excludeAll (excludedDependencies: _*),
-      spark("hive").value            % Provided
-    ),
+      "com.azavea"               %% "hiveless-core"     % hivelessVersion,
+      "com.azavea"               %% "hiveless-jts"      % hivelessVersion,
+      "org.locationtech.geomesa" %% "geomesa-spark-jts" % geomesaVersion,
+      spark("hive").value         % Provided
+    ) ++ Seq(
+      "org.locationtech.geotrellis" %% "geotrellis-store"         % geotrellisVersion,
+      "org.locationtech.geotrellis" %% "geotrellis-spark-testkit" % geotrellisVersion % Test
+    ).map(_ excludeAll (excludedDependencies: _*)),
     assembly / test := {},
     assembly / assemblyShadeRules := {
       val shadePackage = "com.carto.analytics"
