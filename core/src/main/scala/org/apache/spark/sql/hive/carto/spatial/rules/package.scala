@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.apache.spark.sql.hive.hiveless.spatial
+package org.apache.spark.sql.hive.carto.spatial
 
 import org.apache.spark.sql.catalyst.expressions.{And, Expression}
 import org.apache.spark.sql.hive.HiveGenericUDF

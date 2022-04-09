@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.apache.spark.sql.hive.hiveless.spatial.rules
+package org.apache.spark.sql.hive.carto.spatial.rules
 
 import com.carto.analyticstoolbox.core._
 import com.carto.analyticstoolbox.index.ST_IntersectsExtent

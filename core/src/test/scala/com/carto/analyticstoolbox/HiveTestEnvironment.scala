@@ -19,7 +19,7 @@ package com.carto.analyticstoolbox
 import geotrellis.spark.testkit.TestEnvironment
 import org.apache.spark.SparkConf
 import org.apache.spark.serializer.KryoSerializer
-import org.apache.spark.sql.hive.hiveless.spatial.rules.SpatialFilterPushdownRules
+import org.apache.spark.sql.hive.carto.spatial.rules.SpatialFilterPushdownRules
 import org.apache.spark.sql.{SQLContext, SparkSession}
 import org.scalatest.{BeforeAndAfterAll, Suite}
 
