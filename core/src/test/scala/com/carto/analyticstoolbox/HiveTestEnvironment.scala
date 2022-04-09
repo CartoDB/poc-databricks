@@ -25,11 +25,10 @@ import org.scalatest.{BeforeAndAfterAll, Suite}
 
 import java.io.File
 import scala.io.Source
-import scala.language.reflectiveCalls
 import scala.util.Properties
 
-trait TestEnvironmentHive extends TestEnvironment { self: Suite with BeforeAndAfterAll =>
-  import TestEnvironmentHive._
+trait HiveTestEnvironment extends TestEnvironment { self: Suite with BeforeAndAfterAll =>
+  import HiveTestEnvironment._
 
   // function to override Hive SQL functions registration
   def registerHiveUDFs(ssc: SparkSession): Unit =
@@ -41,6 +40,15 @@ trait TestEnvironmentHive extends TestEnvironment { self: Suite with BeforeAndAf
   // function to override optimizations
   def registerOptimizations(sqlContext: SQLContext): Unit =
     SpatialFilterPushdownRules.registerOptimizations(sqlContext)
+
+  val (warehouseDir, derbyConnectionURL) = {
+    val tmpDir = System.getProperty("java.io.tmpdir")
+    // a separate warehouse for each spec, JDK 8 is unhappy with the old directory being populated
+    val wdir          = s"${tmpDir}/cartoanalyticstoolbox-warehouse/${self.getClass.getName}"
+    val ddir          = s"${tmpDir}/cartoanalyticstoolbox-db/${self.getClass.getName}"
+    val connectionURL = s"jdbc:derby:;databaseName=${ddir};create=true"
+    (wdir, connectionURL)
+  }
 
   // override the SparkSession construction to enable Hive support
   override lazy val _ssc: SparkSession = {
@@ -56,7 +64,8 @@ trait TestEnvironmentHive extends TestEnvironment { self: Suite with BeforeAndAf
       // Since Spark 3.2.0 this flag is set to true by default
       // We need it to be set to false, since it is required by the HBase TableInputFormat
       .set("spark.hadoopRDD.ignoreEmptySplits", "false")
-      .set("spark.sql.warehouse.dir", "/tmp/cartoanalyticstoolbox/metastore_db")
+      .set("spark.sql.warehouse.dir", warehouseDir)
+      .set("javax.jdo.option.ConnectionURL", derbyConnectionURL)
 
     // Shortcut out of using Kryo serialization if we want to test against
     // java serialization.
@@ -81,7 +90,7 @@ trait TestEnvironmentHive extends TestEnvironment { self: Suite with BeforeAndAf
   }
 }
 
-object TestEnvironmentHive {
+object HiveTestEnvironment {
   implicit class AutoCloseableOps[A <: AutoCloseable](val resource: A) extends AnyVal {
     def using[B](f: A => B): B = try f(resource)
     finally resource.close()

@@ -16,13 +16,23 @@
 
 package com.carto.analyticstoolbox.index
 
-import com.carto.analyticstoolbox.{TestEnvironmentHive, TestTables}
+import com.carto.analyticstoolbox.{HiveTestEnvironment, TestTables}
 import org.apache.spark.sql.catalyst.plans.logical.Filter
 import org.scalatest.funspec.AnyFunSpec
 
-class STIndexSpec extends AnyFunSpec with TestEnvironmentHive with TestTables {
+class STIndexSpec extends AnyFunSpec with HiveTestEnvironment with TestTables {
 
   describe("ST Index functions spec") {
+    it("ST_IntersectsExtent should filter a CSV file") {
+      val df = ssc.sql(
+        """
+          |SELECT * FROM polygons_csv_view WHERE ST_IntersectsExtent(bbox, ST_GeomFromGeoJSON('{"type":"Polygon","coordinates":[[[-75.5859375,40.32517767999294],[-75.5859375,43.197167282501276],[-72.41015625,43.197167282501276],[-72.41015625,40.32517767999294],[-75.5859375,40.32517767999294]]]}'))
+          |""".stripMargin
+      )
+
+      df.count() shouldBe 5
+    }
+
     it("ST_IntersectsExtent should filter a Parquet file") {
       val df = ssc.sql(
         """

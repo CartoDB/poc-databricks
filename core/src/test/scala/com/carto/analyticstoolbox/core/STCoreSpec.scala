@@ -16,10 +16,10 @@
 
 package com.carto.analyticstoolbox.core
 
-import com.carto.analyticstoolbox.{TestEnvironmentHive, TestTables}
+import com.carto.analyticstoolbox.{HiveTestEnvironment, TestTables}
 import org.scalatest.funspec.AnyFunSpec
 
-class STCoreSpec extends AnyFunSpec with TestEnvironmentHive with TestTables {
+class STCoreSpec extends AnyFunSpec with HiveTestEnvironment with TestTables {
   describe("ST Core functions spec") {
     it("ST_Intersects should filter a CSV view") {
       val df = ssc.sql(

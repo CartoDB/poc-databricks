@@ -18,7 +18,7 @@ package com.carto.analyticstoolbox
 
 import java.io.File
 
-trait TestTables { self: TestEnvironmentHive =>
+trait TestTables { self: HiveTestEnvironment =>
   // core/src/test/resources/polygons.csv when JVM is not forked
   val uriCSV     = new File("src/test/resources/polygons.csv").toURI.toString
   val uriParquet = new File("src/test/resources/polygons.snappy.parquet").toURI.toString

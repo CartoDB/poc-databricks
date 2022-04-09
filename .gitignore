@@ -57,3 +57,7 @@ java/data
 java/*.dylib
 java/*.so
 java/*dll
+
+# Spark files
+metastore_db
+derby.log
