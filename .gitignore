@@ -48,11 +48,11 @@ metals.sbt
 
 .bsp
 
-# Test data files #
+# Test data files
 
 java/data
 
-# Compiled libs #
+# Compiled libs
 
 java/*.dylib
 java/*.so

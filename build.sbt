@@ -53,6 +53,7 @@ lazy val commonSettings = Seq(
   homepage               := Some(url("https://github.com/CartoDB/analytics-toolbox-databricks")),
   versionScheme          := Some("semver-spec"),
   Test / publishArtifact := false,
+  Test / fork            := true,
   developers := List(
     Developer(
       "pomadchin",
