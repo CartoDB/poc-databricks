@@ -30,12 +30,16 @@ import scala.util.Properties
 trait HiveTestEnvironment extends TestEnvironment { self: Suite with BeforeAndAfterAll =>
   import HiveTestEnvironment._
 
+  def loadSQL(path: String): List[String] =
+    Source
+      .fromFile(new File(path).toURI)
+      .using(_.mkString.split(";").toList.map(_.trim).filter(_.nonEmpty))
+
+  def spatialFunctions: List[String] = loadSQL("../core/sql/createUDFs.sql")
+
   // function to override Hive SQL functions registration
   def registerHiveUDFs(ssc: SparkSession): Unit =
-    Source
-      .fromFile(new File("../core/sql/createUDFs.sql").toURI)
-      .using(_.mkString.split(";").toList.map(_.trim).filter(_.nonEmpty))
-      .foreach(ssc.sql)
+    spatialFunctions.foreach(ssc.sql)
 
   // function to override optimizations
   def registerOptimizations(sqlContext: SQLContext): Unit =
