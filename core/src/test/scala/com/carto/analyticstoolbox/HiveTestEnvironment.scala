@@ -33,7 +33,7 @@ trait HiveTestEnvironment extends TestEnvironment { self: Suite with BeforeAndAf
   // function to override Hive SQL functions registration
   def registerHiveUDFs(ssc: SparkSession): Unit =
     Source
-      .fromFile(new File("sql/createUDFs.sql").toURI)
+      .fromFile(new File("../core/sql/createUDFs.sql").toURI)
       .using(_.mkString.split(";").toList.map(_.trim).filter(_.nonEmpty))
       .foreach(ssc.sql)
 

@@ -20,8 +20,8 @@ import java.io.File
 
 trait TestTables { self: HiveTestEnvironment =>
   // core/src/test/resources/polygons.csv when JVM is not forked
-  val uriCSV     = new File("src/test/resources/polygons.csv").toURI.toString
-  val uriParquet = new File("src/test/resources/polygons.snappy.parquet").toURI.toString
+  def uriCSV: String     = new File("../core/src/test/resources/polygons.csv").toURI.toString
+  def uriParquet: String = new File("../core/src/test/resources/polygons.snappy.parquet").toURI.toString
 
   // create tmp views
   ssc.read
@@ -35,21 +35,26 @@ trait TestTables { self: HiveTestEnvironment =>
     .createOrReplaceTempView("polygons_parquet")
 
   // create view with a parsed geometry and bbox columns
-  ssc.sql(
-    """
-      |CREATE TEMPORARY VIEW polygons_csv_view AS (
-      |  SELECT *, ST_GeomFromWKT(wkt) AS geom, ST_ExtentFromGeom(ST_GeomFromWKT(wkt)) as bbox FROM polygons_csv
-      |);
-      |""".stripMargin
-  )
+  def createViews(): Unit =
+    ssc.sql(
+      """
+        |CREATE TEMPORARY VIEW polygons_csv_view AS (
+        |  SELECT *, ST_GeomFromWKT(wkt) AS geom, ST_ExtentFromGeom(ST_GeomFromWKT(wkt)) as bbox FROM polygons_csv
+        |);
+        |""".stripMargin
+    )
+
+  createViews()
 
   // Parquet generation
-  /*ssc.sql("DROP TABLE polygons_parquet;")
-  ssc.sql(
-    """
-      |CREATE TABLE polygons_parquet
-      |USING PARQUET LOCATION '/tmp/polygons_parquet'
-      |AS (SELECT * FROM polygons_csv_view);
-      |""".stripMargin
-  )*/
+  def createParquet(drop: Boolean = false): Unit = {
+    if (drop) ssc.sql("DROP TABLE polygons_parquet;")
+    ssc.sql(
+      """
+        |CREATE TABLE polygons_parquet
+        |USING PARQUET LOCATION '/tmp/polygons_parquet'
+        |AS (SELECT * FROM polygons_csv_view);
+        |""".stripMargin
+    )
+  }
 }
