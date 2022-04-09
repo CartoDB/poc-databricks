@@ -17,7 +17,7 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "com.carto.analyticstoolbox" %% "core" % "<version>"
+  "com.carto.analyticstoolbox" %% "core" % "<latest version>"
 )
 ```
 
