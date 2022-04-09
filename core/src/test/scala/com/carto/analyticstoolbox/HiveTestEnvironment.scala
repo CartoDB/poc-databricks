@@ -16,10 +16,10 @@
 
 package com.carto.analyticstoolbox
 
+import com.carto.analyticstoolbox.spark.rules.SpatialFilterPushdownRules
 import geotrellis.spark.testkit.TestEnvironment
 import org.apache.spark.SparkConf
 import org.apache.spark.serializer.KryoSerializer
-import org.apache.spark.sql.hive.carto.spatial.rules.SpatialFilterPushdownRules
 import org.apache.spark.sql.{SQLContext, SparkSession}
 import org.scalatest.{BeforeAndAfterAll, Suite}
 

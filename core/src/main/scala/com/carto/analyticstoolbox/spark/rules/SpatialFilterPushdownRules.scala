@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package org.apache.spark.sql.hive.carto.spatial.rules
+package com.carto.analyticstoolbox.spark.rules
 
 import com.carto.analyticstoolbox.core._
 import com.carto.analyticstoolbox.index.ST_IntersectsExtent
 import com.azavea.hiveless.serializers.syntax._
-import org.locationtech.jts.geom.Geometry
+import com.azavea.hiveless.spark.rules.syntax._
 import geotrellis.vector._
 import cats.syntax.option._
+import org.apache.spark.sql.hive.HivelessInternals.HiveGenericUDF
 import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.catalyst.plans.logical.{Filter, LogicalPlan}
 import org.apache.spark.sql.catalyst.rules.Rule
-import org.apache.spark.sql.hive.HiveGenericUDF
 
 object SpatialFilterPushdownRules extends Rule[LogicalPlan] {
 
@@ -40,13 +40,15 @@ object SpatialFilterPushdownRules extends Rule[LogicalPlan] {
         val extent = geometryExpr.eval(null).convert[Geometry].extent
 
         // transform expression
-        val expr = List(
-          IsNotNull(bboxExpr),
-          GreaterThanOrEqual(GetStructField(bboxExpr, 0, "xmin".some), Literal(extent.xmin)),
-          GreaterThanOrEqual(GetStructField(bboxExpr, 1, "ymin".some), Literal(extent.ymin)),
-          LessThanOrEqual(GetStructField(bboxExpr, 2, "xmax".some), Literal(extent.xmax)),
-          LessThanOrEqual(GetStructField(bboxExpr, 3, "ymax".some), Literal(extent.ymax))
-        ).and
+        val expr = AndList(
+          List(
+            IsNotNull(bboxExpr),
+            GreaterThanOrEqual(GetStructField(bboxExpr, 0, "xmin".some), Literal(extent.xmin)),
+            GreaterThanOrEqual(GetStructField(bboxExpr, 1, "ymin".some), Literal(extent.ymin)),
+            LessThanOrEqual(GetStructField(bboxExpr, 2, "xmax".some), Literal(extent.xmax)),
+            LessThanOrEqual(GetStructField(bboxExpr, 3, "ymax".some), Literal(extent.ymax))
+          )
+        )
 
         Filter(expr, plan)
     }

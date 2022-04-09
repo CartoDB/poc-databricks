@@ -8,7 +8,7 @@ val shapelessVersion  = "2.3.3" // to be compatible with Spark 3.1.x
 val scalaTestVersion  = "3.2.11"
 val jtsVersion        = "1.18.1"
 val geomesaVersion    = "3.3.0"
-val hivelessVersion   = "0.0.4"
+val hivelessVersion   = "0.0.6"
 val geotrellisVersion = "3.6.2"
 
 // GeoTrellis depends on Shapeless 2.3.7
