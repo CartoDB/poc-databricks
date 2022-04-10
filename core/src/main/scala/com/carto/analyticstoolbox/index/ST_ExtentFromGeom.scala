@@ -20,7 +20,6 @@ import com.carto.analyticstoolbox.core._
 
 import com.azavea.hiveless.HUDF
 import geotrellis.vector._
-import org.locationtech.jts.geom.Geometry
 
 class ST_ExtentFromGeom extends HUDF[Geometry, Extent] {
   val name: String = "st_extentFromGeom"

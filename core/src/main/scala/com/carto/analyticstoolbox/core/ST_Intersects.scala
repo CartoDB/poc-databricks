@@ -16,14 +16,33 @@
 
 package com.carto.analyticstoolbox.core
 
+import com.carto.analyticstoolbox.core._
+import com.carto.analyticstoolbox.index._
+
 import com.azavea.hiveless.HUDF
 import com.azavea.hiveless.implicits.tupler._
-import org.locationtech.geomesa.spark.jts.udf.SpatialRelationFunctions
-import org.locationtech.jts.geom.Geometry
+import com.azavea.hiveless.serializers.UnaryDeserializer
+import geotrellis.vector._
+import shapeless._
 
-import java.{lang => jl}
+class ST_Intersects extends HUDF[(ST_Intersects.Arg, ST_Intersects.Arg), Boolean] {
+  val name: String = "st_intersects"
+  def function     = ST_Intersects.function
+}
 
-class ST_Intersects extends HUDF[(Geometry, Geometry), jl.Boolean] {
-  val name: String = "st_intersection"
-  def function     = SpatialRelationFunctions.ST_Intersects
+object ST_Intersects {
+  import UnaryDeserializer.Errors.ProductDeserializationError
+
+  type Arg = Extent :+: Geometry :+: CNil
+
+  def parseExtent(a: Arg): Option[Extent] = a.select[Extent].orElse(a.select[Geometry].map(_.extent))
+
+  private def parseExtentUnsafe(a: Arg, aname: String): Extent =
+    parseExtent(a).getOrElse(throw ProductDeserializationError[Arg](classOf[ST_Intersects], aname))
+
+  def function(left: Arg, right: Arg): Boolean = {
+    val (l, r) = (parseExtentUnsafe(left, "first"), parseExtentUnsafe(right, "second"))
+
+    l.intersects(r)
+  }
 }
