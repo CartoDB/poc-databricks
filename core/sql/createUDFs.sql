@@ -81,7 +81,6 @@ CREATE OR REPLACE FUNCTION st_crsFromText as 'com.carto.analyticstoolbox.index.S
 CREATE OR REPLACE FUNCTION st_extentFromGeom as 'com.carto.analyticstoolbox.index.ST_ExtentFromGeom';
 CREATE OR REPLACE FUNCTION st_extentToGeom as 'com.carto.analyticstoolbox.index.ST_ExtentToGeom';
 CREATE OR REPLACE FUNCTION st_geomReproject as 'com.carto.analyticstoolbox.index.ST_GeomReproject';
-CREATE OR REPLACE FUNCTION st_intersectsExtent as 'com.carto.analyticstoolbox.index.ST_IntersectsExtent';
-CREATE OR REPLACE FUNCTION st_intersectsExtents as 'com.carto.analyticstoolbox.index.ST_IntersectsExtents';
+CREATE OR REPLACE FUNCTION st_makeExtent as 'com.carto.analyticstoolbox.index.ST_MakeExtent';
 CREATE OR REPLACE FUNCTION st_partitionCentroid as 'com.carto.analyticstoolbox.index.ST_PartitionCentroid';
 CREATE OR REPLACE FUNCTION st_z2LatLon as 'com.carto.analyticstoolbox.index.ST_Z2LatLon';

@@ -23,7 +23,6 @@ import geotrellis.layer.{SpatialKey, ZoomedLayoutScheme}
 import geotrellis.vector._
 import geotrellis.proj4.{CRS, LatLng}
 import geotrellis.store.index.zcurve.Z2
-import org.locationtech.jts.geom.Geometry
 
 class ST_PartitionCentroid extends HUDF[(Geometry, Int, Option[Int], Option[Int], Option[CRS], Option[Double]), Long] {
   val name: String = "st_partitionCentroid"

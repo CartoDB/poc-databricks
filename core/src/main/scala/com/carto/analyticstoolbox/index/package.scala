@@ -33,6 +33,10 @@ package object index extends StandardEncoders {
     def convert(argument: Any): CRS = CRS.fromString(argument.convert[String])
   }
 
+  implicit def extentConverter: HConverter[Extent] = new HConverter[Extent] {
+    def convert(argument: Any): Extent = argument.convert[InternalRow].as[Extent]
+  }
+
   implicit def crsUnaryDeserializer: UnaryDeserializer[Id, CRS] =
     (arguments, inspectors) => arguments.deserialize[String](inspectors).convert[CRS]
 

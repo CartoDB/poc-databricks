@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Azavea
+ * Copyright 2022 Azavea
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@
 package com.carto.analyticstoolbox.index
 
 import com.azavea.hiveless.HUDF
+import geotrellis.vector.Extent
 import com.azavea.hiveless.implicits.tupler._
-import geotrellis.vector._
 
-class ST_IntersectsExtents extends HUDF[(Extent, Extent), Boolean] {
-  val name: String = "st_intersectsExtents"
-  def function     = { (e1: Extent, e2: Extent) => e1.intersects(e2) }
+class ST_MakeExtent extends HUDF[(Double, Double, Double, Double), Extent] {
+  val name: String = "st_makeExtent"
+  def function     = Extent.apply
 }
