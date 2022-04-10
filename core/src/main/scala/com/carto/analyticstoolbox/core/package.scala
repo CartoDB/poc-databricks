@@ -16,7 +16,7 @@
 
 package com.carto.analyticstoolbox
 
-import com.azavea.hiveless.serializers.{HConverter, HSerializer, UnaryDeserializer}
+import com.azavea.hiveless.serializers.{HConverter, HDeserializer, HSerializer}
 import com.azavea.hiveless.serializers.syntax._
 import com.azavea.hiveless.spatial.util.TWKBUtils
 import cats.Id
@@ -29,7 +29,7 @@ package object core extends Serializable {
     def convert(argument: Any): T = TWKBUtils.read(argument.asInstanceOf[Array[Byte]]).asInstanceOf[T]
   }
 
-  implicit def geometryUnaryDeserializer[T <: Geometry: HConverter]: UnaryDeserializer[Id, T] =
+  implicit def geometryUnaryDeserializer[T <: Geometry: HConverter]: HDeserializer[Id, T] =
     (arguments, inspectors) => arguments.deserialize[Array[Byte]](inspectors).convert[T]
 
   implicit def geometrySerializer[T <: Geometry]: HSerializer[T] = new HSerializer[T] {

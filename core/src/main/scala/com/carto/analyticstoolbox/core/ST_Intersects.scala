@@ -21,7 +21,7 @@ import com.carto.analyticstoolbox.index._
 
 import com.azavea.hiveless.HUDF
 import com.azavea.hiveless.implicits.tupler._
-import com.azavea.hiveless.serializers.UnaryDeserializer
+import com.azavea.hiveless.serializers.HDeserializer.Errors.ProductDeserializationError
 import geotrellis.vector._
 import shapeless._
 
@@ -31,8 +31,6 @@ class ST_Intersects extends HUDF[(ST_Intersects.Arg, ST_Intersects.Arg), Boolean
 }
 
 object ST_Intersects {
-  import UnaryDeserializer.Errors.ProductDeserializationError
-
   // We could use Either[Extent, Geometry], but Either has no safe fall back CNil
   // which may lead to derivation error messages rather than parsing
   type Arg = Extent :+: Geometry :+: CNil

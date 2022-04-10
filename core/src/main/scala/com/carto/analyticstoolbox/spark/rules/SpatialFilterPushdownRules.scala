@@ -19,7 +19,7 @@ package com.carto.analyticstoolbox.spark.rules
 import com.carto.analyticstoolbox.core._
 import com.carto.analyticstoolbox.index._
 import com.azavea.hiveless.spark.rules.syntax._
-import com.azavea.hiveless.serializers.UnaryDeserializer.Errors.ProductDeserializationError
+import com.azavea.hiveless.serializers.HDeserializer.Errors.ProductDeserializationError
 import com.azavea.hiveless.serializers.syntax._
 import geotrellis.vector._
 import cats.syntax.option._

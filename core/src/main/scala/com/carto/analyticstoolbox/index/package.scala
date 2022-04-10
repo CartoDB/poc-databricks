@@ -19,7 +19,7 @@ package com.carto.analyticstoolbox
 import com.carto.analyticstoolbox.spark.geotrellis.encoders.StandardEncoders
 import com.carto.analyticstoolbox.spark.geotrellis.Z2Index
 
-import com.azavea.hiveless.serializers.{HConverter, HSerializer, UnaryDeserializer}
+import com.azavea.hiveless.serializers.{HConverter, HDeserializer, HSerializer}
 import com.azavea.hiveless.serializers.syntax._
 import com.azavea.hiveless.spark.encoders.syntax._
 import cats.Id
@@ -37,7 +37,7 @@ package object index extends StandardEncoders {
     def convert(argument: Any): Extent = argument.convert[InternalRow].as[Extent]
   }
 
-  implicit def crsUnaryDeserializer: UnaryDeserializer[Id, CRS] =
+  implicit def crsUnaryDeserializer: HDeserializer[Id, CRS] =
     (arguments, inspectors) => arguments.deserialize[String](inspectors).convert[CRS]
 
   implicit def crsSerializer: HSerializer[CRS] = new HSerializer[CRS] {
@@ -57,6 +57,6 @@ package object index extends StandardEncoders {
   }
 
   /** UnaryDeserializer.expressionEncoderUnaryDeserializer since TypeTags are not Kryo serializable by default. */
-  implicit def extentUnaryDeserializer: UnaryDeserializer[Id, Extent] =
+  implicit def extentUnaryDeserializer: HDeserializer[Id, Extent] =
     (arguments, inspectors) => arguments.deserialize[InternalRow](inspectors).as[Extent]
 }
