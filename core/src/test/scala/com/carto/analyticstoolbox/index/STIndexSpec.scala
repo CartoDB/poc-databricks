@@ -68,6 +68,7 @@ class STIndexSpec extends AnyFunSpec with HiveTestEnvironment with TestTables {
           |AND bbox.ymin >= 40.3251777
           |AND bbox.xmax <= -72.4101562
           |AND bbox.ymax <= 43.1971673
+          |AND ST_Intersects(bbox, ST_GeomFromGeoJSON('{"type":"Polygon","coordinates":[[[-75.5859375,40.32517767999294],[-75.5859375,43.197167282501276],[-72.41015625,43.197167282501276],[-72.41015625,40.32517767999294],[-75.5859375,40.32517767999294]]]}'))
           |""".stripMargin
       )
 

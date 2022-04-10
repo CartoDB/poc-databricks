@@ -56,8 +56,8 @@ object SpatialFilterPushdownRules extends Rule[LogicalPlan] {
               // ST_Intersects is polymorphic by the second argument
               // Extract Extent literal from the right
               // The second argument can be Geometry or Extent
-              val extent = Try(g.convert[Geometry].extent)
-                .orElse(Try(g.convert[Extent]))
+              val (extent, isGeometry) = Try(g.convert[Geometry].extent -> true)
+                .orElse(Try(g.convert[Extent] -> false))
                 .getOrElse(throw ProductDeserializationError[ST_Intersects.Arg](classOf[ST_Intersects], "second"))
 
               // transform expression
@@ -68,7 +68,9 @@ object SpatialFilterPushdownRules extends Rule[LogicalPlan] {
                   GreaterThanOrEqual(GetStructField(extentExpr, 1, "ymin".some), Literal(extent.ymin)),
                   LessThanOrEqual(GetStructField(extentExpr, 2, "xmax".some), Literal(extent.xmax)),
                   LessThanOrEqual(GetStructField(extentExpr, 3, "ymax".some), Literal(extent.ymax))
-                )
+                  // the old condition node is a secondary filter which is not pushed down
+                  // it is needed in case it is a Geometry intersection
+                ) ::: (if (isGeometry) List(condition) else Nil)
               )
             // Expression
             case Failure(_) =>
