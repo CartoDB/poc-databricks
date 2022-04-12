@@ -70,6 +70,7 @@ trait HiveTestEnvironment extends TestEnvironment { self: Suite with BeforeAndAf
       .set("spark.hadoopRDD.ignoreEmptySplits", "false")
       .set("spark.sql.warehouse.dir", warehouseDir)
       .set("javax.jdo.option.ConnectionURL", derbyConnectionURL)
+      .set("spark.sql.extensions", "com.carto.analyticstoolbox.spark.SpatialFilterPushdownOptimizations")
 
     // Shortcut out of using Kryo serialization if we want to test against
     // java serialization.
