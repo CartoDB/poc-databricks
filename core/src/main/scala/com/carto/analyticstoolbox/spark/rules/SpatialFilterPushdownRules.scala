@@ -37,7 +37,14 @@ object SpatialFilterPushdownRules extends Rule[LogicalPlan] {
   @transient private[this] lazy val logger = getLogger
 
   def apply(plan: LogicalPlan): LogicalPlan =
-    plan.transformDown {
+    // format: off
+    /**
+     * transform is an alias to transformDown
+     * The transformDown usage causes the following error on DataBricks 9.1:
+     *   java.lang.NoClassDefFoundError: LogicalPlan.transformDown(Lscala/PartialFunction;)Lorg/apache/spark/sql/catalyst/plans/logical/LogicalPlan;
+     */
+    // format: on
+    plan.transform {
       case f @ Filter(condition: HiveGenericUDF, plan) if condition.of[ST_Intersects] =>
         try {
           val Seq(extentExpr, geometryExpr) = condition.children
@@ -46,7 +53,7 @@ object SpatialFilterPushdownRules extends Rule[LogicalPlan] {
           // Optimization is done only when the first argument is Extent
           if (!extentExpr.dataType.conformsToSchema(extentEncoder.schema))
             throw new UnsupportedOperationException(
-              s"${classOf[ST_Intersects]} push-down optimization works on the Extent column data type only."
+              s"${classOf[ST_Intersects]} push-down optimization works on the ${classOf[Extent]} column data type only."
             )
 
           // transform expression
@@ -58,7 +65,7 @@ object SpatialFilterPushdownRules extends Rule[LogicalPlan] {
               // The second argument can be Geometry or Extent
               val (extent, isGeometry) = Try(g.convert[Geometry].extent -> true)
                 .orElse(Try(g.convert[Extent] -> false))
-                .getOrElse(throw ProductDeserializationError[ST_Intersects.Arg](classOf[ST_Intersects], "second"))
+                .getOrElse(throw ProductDeserializationError[ST_Intersects, ST_Intersects.Arg]("second"))
 
               // transform expression
               AndList(
@@ -97,12 +104,12 @@ object SpatialFilterPushdownRules extends Rule[LogicalPlan] {
                 )
               } else {
                 throw new UnsupportedOperationException(
-                  "Geometry Envelope values extraction is not supported by the internal Geometry representation.".stripMargin
+                  s"${classOf[Geometry]} Envelope values extraction is not supported by the internal ${classOf[Geometry]} representation.".stripMargin
                 )
               }*/
 
               throw new UnsupportedOperationException(
-                s"${classOf[ST_Intersects]} push-down optimization works with Geometry and Extent Literals only."
+                s"${classOf[ST_Intersects]} push-down optimization works with ${classOf[Geometry]} and ${classOf[Extent]} Literals only."
               )
           }
 
@@ -112,7 +119,7 @@ object SpatialFilterPushdownRules extends Rule[LogicalPlan] {
           case e: Throwable =>
             logger.warn(
               s"""
-                 |${this.getClass.getName} ${classOf[ST_Intersects]} optimization failed.
+                 |${this.getClass.getName} ${classOf[ST_Intersects]} optimization failed, using the original plan.
                  |StackTrace: ${ExceptionUtils.getStackTrace(e)}
                  |""".stripMargin
             )
