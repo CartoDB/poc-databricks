@@ -38,7 +38,7 @@ object ST_Intersects {
   def parseGeometry(a: Arg): Option[Geometry] = a.select[Geometry].orElse(a.select[Extent].map(_.toPolygon()))
 
   private def parseGeometryUnsafe(a: Arg, aname: String): Geometry =
-    parseGeometry(a).getOrElse(throw ProductDeserializationError[Arg](classOf[ST_Intersects], aname))
+    parseGeometry(a).getOrElse(throw ProductDeserializationError[ST_Intersects, Arg](aname))
 
   def function(left: Arg, right: Arg): Boolean = {
     val (l, r) = (parseGeometryUnsafe(left, "first"), parseGeometryUnsafe(right, "second"))
