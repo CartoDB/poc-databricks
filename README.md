@@ -65,8 +65,9 @@ spark.optimizeSpatial(sourceTable, outputTable, outputLocation, blockSize = 2009
 #### Create Initialization Script
 
 First, write a script to DBFS which can be used to copy jars from
-[DBFS](https://docs.databricks.com/data/databricks-file-system.html) to the local filesystem
-on master.
+[DBFS](https://docs.databricks.com/data/databricks-file-system.html) to
+[the default class path](https://kb.databricks.com/libraries/replace-default-jar-new-jar.html)
+cluster directory on master.
 
 (Note that you will replace 'analytics-toolbox.jar' with whatever your jar is named.)
 This script can be written using a notebook cell:
@@ -82,13 +83,10 @@ cat > /dbfs/FileStore/carto/carto-init.sh <<'EOF'
 #
 # 
 # On cluster startup, this script will copy the Carto jars to the cluster's default jar directory.
-# In order to activate Carto ST_Intersection plan optimization: "com.carto.analyticstoolbox.spark.rules.SpatialFilterPushdownRules"
+# In order to activate Carto ST_Intersection plan optimization: "com.carto.analyticstoolbox.spark.rules.sql.SpatialFilterPushdownRules"
 
 # cp /dbfs/FileStore/jars/maven/com/carto/analyticstoolbox/*<version>.jar /databricks/jars
-# cp /dbfs/FileStore/jars/maven/com/carto/analyticstoolbox/*<version>.jar /databricks/jars
-
 # tmp solution to handle the assembly jar
-cp /dbfs/FileStore/jars/maven/com/carto/analyticstoolbox/analytics-toolbox.jar /databricks/jars
 cp /dbfs/FileStore/jars/*<version>.jar /databricks/jars
 
 EOF
@@ -111,7 +109,7 @@ This will inform spark of the class which will register sql extensions. Move fro
 of advanced options to the 'Init scripts' tab and add an entry for the initialization script
 written above (dbfs:/FileStore/carto/carto-init.sh).
 
-That should do it. Restart the cluster and predicate pushdown for spatial intersection is enabled,
+Restart the cluster and predicate pushdown for spatial intersection is enabled,
 allowing certain workflows to run far more efficiently.
 
 
@@ -124,7 +122,7 @@ this:
 
 1. The JVM process starts with the cluster default classpath
 2. The spark config is initialized (Here's where we want to enable optimizations)
-3. VFS/DBFS user class paths are mounted
+3. [VFS](https://commons.apache.org/proper/commons-vfs/) / [DBFS](https://docs.databricks.com/data/databricks-file-system.html) user class paths are mounted
 
 The jar which contains classes that are referenced in step 2 isn't available prior to step 3!
 Fortunately, it is possible to set up Databricks
