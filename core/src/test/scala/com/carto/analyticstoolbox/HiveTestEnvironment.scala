@@ -16,7 +16,7 @@
 
 package com.carto.analyticstoolbox
 
-import com.carto.analyticstoolbox.spark.rules.SpatialFilterPushdownRules
+import com.carto.analyticstoolbox.spark.sql.rules.SpatialFilterPushdownRules
 import geotrellis.spark.testkit.TestEnvironment
 import org.apache.spark.SparkConf
 import org.apache.spark.serializer.KryoSerializer
@@ -45,7 +45,10 @@ trait HiveTestEnvironment extends TestEnvironment { self: Suite with BeforeAndAf
   def registerOptimizations(sqlContext: SQLContext): Unit =
     SpatialFilterPushdownRules.registerOptimizations(sqlContext)
 
-  val (warehouseDir, derbyConnectionURL) = {
+  def addSparkConfigProperties(config: SparkConf): Unit = {}
+
+  // returns (warehouseDir, derbyConnectionURL)
+  def warehouseLocation: (String, String) = {
     val tmpDir = System.getProperty("java.io.tmpdir")
     // a separate warehouse for each spec, JDK 8 is unhappy with the old directory being populated
     val wdir          = s"${tmpDir}/cartoanalyticstoolbox-warehouse/${self.getClass.getName}"
@@ -54,13 +57,9 @@ trait HiveTestEnvironment extends TestEnvironment { self: Suite with BeforeAndAf
     (wdir, connectionURL)
   }
 
-  // override the SparkSession construction to enable Hive support
-  override lazy val _ssc: SparkSession = {
-    System.setProperty("spark.driver.port", "0")
-    System.setProperty("spark.hostPort", "0")
-    System.setProperty("spark.ui.enabled", "false")
-
-    val conf = new SparkConf()
+  lazy val sparkConfig: SparkConf = {
+    val (warehouseDir, derbyConnectionURL) = warehouseLocation
+    val conf                               = new SparkConf()
     conf
       .setMaster(sparkMaster)
       .setAppName("Test Hive Context")
@@ -81,7 +80,22 @@ trait HiveTestEnvironment extends TestEnvironment { self: Suite with BeforeAndAf
       setKryoRegistrator(conf)
     }
 
-    val sparkContext = SparkSession.builder().config(conf).enableHiveSupport().getOrCreate()
+    addSparkConfigProperties(conf)
+    conf
+  }
+
+  // override the SparkSession construction to enable Hive support
+  override lazy val _ssc: SparkSession = {
+    System.setProperty("spark.driver.port", "0")
+    System.setProperty("spark.hostPort", "0")
+    System.setProperty("spark.ui.enabled", "false")
+
+    val sparkContext =
+      SparkSession
+        .builder()
+        .config(sparkConfig)
+        .enableHiveSupport()
+        .getOrCreate()
 
     System.clearProperty("spark.driver.port")
     System.clearProperty("spark.hostPort")
