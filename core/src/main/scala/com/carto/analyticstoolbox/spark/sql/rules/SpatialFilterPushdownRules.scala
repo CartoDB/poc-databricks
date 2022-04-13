@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.carto.analyticstoolbox.spark.rules
+package com.carto.analyticstoolbox.spark.sql.rules
 
 import com.carto.analyticstoolbox.core._
 import com.carto.analyticstoolbox.index._
