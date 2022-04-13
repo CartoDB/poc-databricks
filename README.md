@@ -55,30 +55,21 @@ spark.optimizeSpatialAuto(sourceTable, outputTable, outputLocation)
 spark.optimizeSpatial(sourceTable, outputTable, outputLocation, blockSize = 20097000)
 ```
 
-### Registering Optimizations on Databricks
 
-> This section and approach are based on [docs]](https://sedona.apache.org/setup/databricks/)
+### Enabling Carto Query Optimizations on Databricks
+
+> This section and approach are based on [docs](https://sedona.apache.org/setup/databricks/)
 > from Apache Sedona.
 
-Installing and registering spark optimizations can be tricky. As is often the case when
-working with distributed systems, there are some fundamental sequencing issues that are
-important to understand. Roughly, the startup of a databricks cluster looks something like
-this:
 
-1. The JVM process starts with the cluster default classpath
-2. The spark config is initialized (Here's where we want to enable optimizations)
-3. VFS/DBFS user class paths are mounted
+#### Create Initialization Script
 
-The jar which contains classes that are referenced in step 2 isn't available prior to step 3!
-Fortunately, it is possible to set up initialization scripts which run prior to step 1 and
-which we can use on databricks to ensure our classes are available by the time a cluster
-loads its spark config.
+First, write a script to DBFS which can be used to copy jars from
+[DBFS](https://docs.databricks.com/data/databricks-file-system.html) to the local filesystem
+on master.
 
-First, write a script to DBFS which can be used to copy jars from DBFS to the local filesystem
-on master. (Note that you will replace 'analytics-toolbox' with whatever your jar is named. For
-example, this is the name of a SNAPSHOT jar used to test these optimizations:
-core-assembly-0.0.12+1-29cd9e81+20220412-0752-SNAPSHOT.jar.) This script can be written using
-a notebook cell:
+(Note that you will replace 'analytics-toolbox.jar' with whatever your jar is named.)
+This script can be written using a notebook cell:
 ```bash
 %sh 
 
@@ -93,19 +84,50 @@ cat > /dbfs/FileStore/carto/carto-init.sh <<'EOF'
 # On cluster startup, this script will copy the Carto jars to the cluster's default jar directory.
 # In order to activate Carto ST_Intersection plan optimization: "com.carto.analyticstoolbox.spark.rules.SpatialFilterPushdownRules"
 
-# cp /dbfs/FileStore/jars/maven/com/carto/analyticstoolbox/*.jar /databricks/jars
+# cp /dbfs/FileStore/jars/maven/com/carto/analyticstoolbox/*<version>.jar /databricks/jars
+# cp /dbfs/FileStore/jars/maven/com/carto/analyticstoolbox/*<version>.jar /databricks/jars
+
 # tmp solution to handle the assembly jar
-cp /dbfs/FileStore/jars/analytics-toolbox.jar /databricks/jars
+cp /dbfs/FileStore/jars/maven/com/carto/analyticstoolbox/analytics-toolbox.jar /databricks/jars
+cp /dbfs/FileStore/jars/*<version>.jar /databricks/jars
 
 EOF
 ```
 
+
+#### Update Cluster Configuration
+
 Next, we need to update the spark config and inform the cluster of its new initialization script.
-Navigate to cluster settings and find the 'Advanced options'. To the spark config, add
-"spark.sql.extensions com.carto.analyticstoolbox.spark.SpatialFilterPushdownOptimizations".
+Navigate to cluster settings and find the 'Advanced options'. From your cluster configuration
+activate the Carto Spatial optimizations by adding to the Spark Config
+(`Cluster` -> `Edit` -> `Configuration` -> `Advanced options` -> `Spark`).
+
+To the spark config, add
+```cfg
+spark.sql.extensions com.carto.analyticstoolbox.spark.sql.SpatialFilterPushdownOptimizations
+```
+
 This will inform spark of the class which will register sql extensions. Move from the 'Spark' tab
 of advanced options to the 'Init scripts' tab and add an entry for the initialization script
 written above (dbfs:/FileStore/carto/carto-init.sh).
 
 That should do it. Restart the cluster and predicate pushdown for spatial intersection is enabled,
 allowing certain workflows to run far more efficiently.
+
+
+#### Why is this necessary?
+
+Installing and registering spark optimizations can be tricky. As is often the case when
+working with distributed systems, there are some fundamental sequencing issues that are
+important to understand. Roughly, the startup of a databricks cluster looks something like
+this:
+
+1. The JVM process starts with the cluster default classpath
+2. The spark config is initialized (Here's where we want to enable optimizations)
+3. VFS/DBFS user class paths are mounted
+
+The jar which contains classes that are referenced in step 2 isn't available prior to step 3!
+Fortunately, it is possible to set up Databricks
+[initialization scripts](https://docs.databricks.com/clusters/init-scripts.html)
+which run prior to step 1 and which we can use on databricks to ensure our classes are
+available by the time a cluster loads its spark config.
