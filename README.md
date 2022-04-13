@@ -115,10 +115,7 @@ allowing certain workflows to run far more efficiently.
 
 #### Why is this necessary?
 
-Installing and registering spark optimizations can be tricky. As is often the case when
-working with distributed systems, there are some fundamental sequencing issues that are
-important to understand. Roughly, the startup of a databricks cluster looks something like
-this:
+The startup of a databricks cluster looks something like:
 
 1. The JVM process starts with the cluster default classpath
 2. The spark config is initialized (Here's where we want to enable optimizations)
