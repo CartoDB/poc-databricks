@@ -103,7 +103,7 @@ spark.sql.extensions com.carto.analyticstoolbox.spark.sql.SpatialFilterPushdownO
 ```
 
 This will inform spark of the class which will register sql extensions. Move from the `Spark` tab
-of advanced options to the 'Init scripts' tab and add an entry for the initialization script
+of advanced options to the `Init scripts` tab and add an entry for the initialization script
 written above (`dbfs:/FileStore/carto/carto-init.sh`).
 
 Restart the cluster and predicate pushdown for spatial intersection is enabled,
