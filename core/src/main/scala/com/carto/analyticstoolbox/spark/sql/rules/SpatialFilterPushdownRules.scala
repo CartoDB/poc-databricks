@@ -33,6 +33,16 @@ import org.log4s.getLogger
 
 import scala.util.{Failure, Success, Try}
 
+import java.io._ 
+object WriteFile {
+  def apply(filename: String, s: String): Unit = {
+      val file = new File(filename)
+      val bw = new BufferedWriter(new FileWriter(file))
+      bw.write(s)
+      bw.close()
+  }
+}
+
 object SpatialFilterPushdownRules extends Rule[LogicalPlan] {
   @transient private[this] lazy val logger = getLogger
 
@@ -63,6 +73,7 @@ object SpatialFilterPushdownRules extends Rule[LogicalPlan] {
               // ST_Intersects is polymorphic by the second argument
               // Extract Extent literal from the right
               // The second argument can be Geometry or Extent
+              WriteFile("/databricks/testrules", "testing...")
               val (extent, isGeometry) = Try(g.convert[Geometry].extent -> true)
                 .orElse(Try(g.convert[Extent] -> false))
                 .getOrElse(throw ProductDeserializationError[ST_Intersects, ST_Intersects.Arg]("second"))

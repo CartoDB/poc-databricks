@@ -16,8 +16,10 @@
 
 package com.carto.analyticstoolbox.spark.spatial
 
-import org.apache.spark.sql.catalyst.TableIdentifier
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.catalyst.TableIdentifier
+import org.apache.spark.sql.hive.HiveContext
+
 
 object OptimizeSpatial extends Serializable {
 
@@ -25,10 +27,10 @@ object OptimizeSpatial extends Serializable {
     sourceTable: String,
     outputTable: String,
     outputLocation: String,
-    zoom: Int,
     computeBlockSize: String => Long,
     compression: String,
-    maxRecordsPerFile: Int
+    maxRecordsPerFile: Int,
+    geomColumn: String
   )(implicit ssc: SparkSession): Unit = {
     // drop tmp views, IF NOT EXISTS is not supported by Spark SQL, that's a DataBricks feature
     // using try catch to capture
@@ -44,26 +46,46 @@ object OptimizeSpatial extends Serializable {
 
     // view creation
     // SQL definition is easier and more readable
-    ssc.sql(
-      s"""
-         |CREATE TEMPORARY VIEW ${sourceTable}_idx_view AS(
-         |  WITH orig_q AS (
-         |    SELECT
-         |      * EXCEPT(geom),
-         |      geom AS wkt,
-         |      ST_geomFromWKT(geom) AS geom
-         |      FROM $sourceTable
-         |    )
-         |    SELECT
-         |      *,
-         |      st_z2LatLon(geom) AS z2,
-         |      st_extentFromGeom(geom) AS bbox,
-         |      st_partitionCentroid(geom, $zoom) AS partitioning
-         |      FROM orig_q
-         |      DISTRIBUTE BY partitioning SORT BY z2.min, z2.max
-         |  );
-         |""".stripMargin
-    )
+    val table_df = ssc.table(sourceTable)
+    if (table_df.schema(geomColumn).dataType == "binary") {
+      ssc.sql(
+        s"""
+          |CREATE TEMPORARY VIEW ${sourceTable}_idx_view AS(
+          |  WITH orig_q AS (
+          |    SELECT
+          |      * EXCEPT($geomColumn),
+          |      $geomColumn AS wkt,
+          |      ST_geomFromTWKB($geomColumn) AS geom
+          |      FROM $sourceTable
+          |    )
+          |    SELECT
+          |      *,
+          |      st_extentFromGeom($geomColumn) AS __carto_index
+          |      FROM orig_q
+          |      DISTRIBUTE BY partitioning SORT BY z2.min, z2.max
+          |  );
+          |""".stripMargin
+      )
+    } else {
+      ssc.sql(
+        s"""
+          |CREATE TEMPORARY VIEW ${sourceTable}_idx_view AS(
+          |  WITH orig_q AS (
+          |    SELECT
+          |      * EXCEPT($geomColumn),
+          |      $geomColumn AS wkt,
+          |      ST_geomFromWKT($geomColumn) AS geom
+          |      FROM $sourceTable
+          |    )
+          |    SELECT
+          |      *,
+          |      st_extentFromGeom($geomColumn) AS __carto_index
+          |      FROM orig_q
+          |      DISTRIBUTE BY partitioning SORT BY z2.min, z2.max
+          |  );
+          |""".stripMargin
+      )
+    }
 
     // configure the output
     val blockSize = computeBlockSize(s"${sourceTable}_idx_view")
@@ -86,24 +108,25 @@ object OptimizeSpatial extends Serializable {
     )
   }
 
+
   /** automatically computes the block size */
-  def auto(
+  def apply(
     sourceTable: String,
     outputTable: String,
     outputLocation: String,
-    zoom: Int,
     blockSizeDefault: Int,
     compression: String,
-    maxRecordsPerFile: Int
+    maxRecordsPerFile: Int,
+    geomColumn: String
   )(implicit ssc: SparkSession): Unit =
     apply(
       sourceTable,
       outputTable,
       outputLocation,
-      zoom,
       computeBlockSize = t => blockSizeCompute(t, blockSizeDefault),
       compression,
-      maxRecordsPerFile
+      maxRecordsPerFile,
+      geomColumn
     )
 
   /** TODO: improve heuristic */
