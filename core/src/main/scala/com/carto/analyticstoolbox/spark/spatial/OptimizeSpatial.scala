@@ -47,45 +47,27 @@ object OptimizeSpatial extends Serializable {
     // view creation
     // SQL definition is easier and more readable
     val table_df = ssc.table(sourceTable)
-    if (table_df.schema(geomColumn).dataType == "binary") {
-      ssc.sql(
-        s"""
-          |CREATE TEMPORARY VIEW ${sourceTable}_idx_view AS(
-          |  WITH orig_q AS (
-          |    SELECT
-          |      * EXCEPT($geomColumn),
-          |      $geomColumn AS wkt,
-          |      ST_geomFromTWKB($geomColumn) AS geom
-          |      FROM $sourceTable
-          |    )
-          |    SELECT
-          |      *,
-          |      st_extentFromGeom($geomColumn) AS __carto_index
-          |      FROM orig_q
-          |      DISTRIBUTE BY partitioning SORT BY z2.min, z2.max
-          |  );
-          |""".stripMargin
-      )
-    } else {
-      ssc.sql(
-        s"""
-          |CREATE TEMPORARY VIEW ${sourceTable}_idx_view AS(
-          |  WITH orig_q AS (
-          |    SELECT
-          |      * EXCEPT($geomColumn),
-          |      $geomColumn AS wkt,
-          |      ST_geomFromWKT($geomColumn) AS geom
-          |      FROM $sourceTable
-          |    )
-          |    SELECT
-          |      *,
-          |      st_extentFromGeom($geomColumn) AS __carto_index
-          |      FROM orig_q
-          |      DISTRIBUTE BY partitioning SORT BY z2.min, z2.max
-          |  );
-          |""".stripMargin
-      )
-    }
+    val parseGeom =
+      if (table_df.schema(geomColumn).dataType == "binary") "ST_geomFromTWKB"
+      else "ST_geomFromWKT"
+    ssc.sql(
+      s"""
+        |CREATE TEMPORARY VIEW ${sourceTable}_idx_view AS(
+        |  WITH orig_q AS (
+        |    SELECT
+        |      * EXCEPT($geomColumn),
+        |      $geomColumn AS wkt,
+        |      $parseGeom($geomColumn) AS geom
+        |      FROM $sourceTable
+        |    )
+        |    SELECT
+        |      *,
+        |      st_extentFromGeom($geomColumn) AS __carto_index
+        |      FROM orig_q
+        |      DISTRIBUTE BY partitioning SORT BY z2.min, z2.max
+        |  );
+        |""".stripMargin
+    )
 
     // configure the output
     val blockSize = computeBlockSize(s"${sourceTable}_idx_view")
