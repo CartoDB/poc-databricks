@@ -20,17 +20,17 @@ import com.carto.analyticstoolbox.spark.sql.rules.SpatialFilterPushdownRules
 import org.apache.spark.sql.SparkSessionExtensions
 
 class SpatialFilterPushdownOptimizations extends (SparkSessionExtensions => Unit) {
-  import java.io._ 
+  import java.io._
   def writeFile(filename: String, s: String): Unit = {
-      val file = new File(filename)
-      val bw = new BufferedWriter(new FileWriter(file))
-      bw.write(s)
-      bw.close()
+    val file = new File(filename)
+    val bw   = new BufferedWriter(new FileWriter(file))
+    bw.write(s)
+    bw.close()
   }
 
-  def apply(e: SparkSessionExtensions): Unit = e.injectOptimizerRule(_ => {
+  def apply(e: SparkSessionExtensions): Unit = e.injectOptimizerRule { _ =>
     println("NOW INITIATING OPTIMIZATIONS")
     writeFile("/databricks/test", "NOW INITIATING OPTIMIZATIONS")
     SpatialFilterPushdownRules
-  })
+  }
 }

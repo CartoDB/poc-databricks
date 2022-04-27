@@ -20,7 +20,6 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.catalyst.TableIdentifier
 import org.apache.spark.sql.hive.HiveContext
 
-
 object OptimizeSpatial extends Serializable {
 
   def apply(
@@ -54,21 +53,21 @@ object OptimizeSpatial extends Serializable {
     // SQL definition is easier and more readable
     ssc.sql(
       s"""
-        |CREATE TEMPORARY VIEW ${sourceTable}_idx_view AS(
-        |  WITH orig_q AS (
-        |    SELECT
-        |      * EXCEPT($geomColumn),
-        |      $geomColumn AS wkt,
-        |      $parseGeom($geomColumn) AS geom
-        |      FROM $sourceTable
-        |    )
-        |    SELECT
-        |      *,
-        |      st_extentFromGeom($geomColumn) AS __carto_index
-        |      FROM orig_q
-        |      DISTRIBUTE BY partitioning SORT BY z2.min, z2.max
-        |  );
-        |""".stripMargin
+         |CREATE TEMPORARY VIEW ${sourceTable}_idx_view AS(
+         |  WITH orig_q AS (
+         |    SELECT
+         |      * EXCEPT($geomColumn),
+         |      $geomColumn AS wkt,
+         |      $parseGeom($geomColumn) AS geom
+         |      FROM $sourceTable
+         |    )
+         |    SELECT
+         |      *,
+         |      st_extentFromGeom($geomColumn) AS __carto_index
+         |      FROM orig_q
+         |      DISTRIBUTE BY partitioning SORT BY z2.min, z2.max
+         |  );
+         |""".stripMargin
     )
 
     // configure the output
@@ -91,7 +90,6 @@ object OptimizeSpatial extends Serializable {
          |""".stripMargin
     )
   }
-
 
   /** automatically computes the block size */
   def apply(

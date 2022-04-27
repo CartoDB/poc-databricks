@@ -33,13 +33,13 @@ import org.log4s.getLogger
 
 import scala.util.{Failure, Success, Try}
 
-import java.io._ 
+import java.io._
 object WriteFile {
   def apply(filename: String, s: String): Unit = {
-      val file = new File(filename)
-      val bw = new BufferedWriter(new FileWriter(file))
-      bw.write(s)
-      bw.close()
+    val file = new File(filename)
+    val bw   = new BufferedWriter(new FileWriter(file))
+    bw.write(s)
+    bw.close()
   }
 }
 

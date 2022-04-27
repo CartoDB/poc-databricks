@@ -18,7 +18,6 @@ package com.carto.analyticstoolbox.spark
 
 import org.apache.spark.sql.SparkSession
 
-
 package object spatial extends Serializable {
   implicit class SparkSessionOps(val ssc: SparkSession) extends AnyVal {
     def optimizeSpatial(
