@@ -48,7 +48,7 @@ object OptimizeSpatial extends Serializable {
     // Decide, based on column type of geometry, which parsing function to use
     val df = ssc.table(sourceTable)
     val parseGeom =
-      if (df.schema(geomColumn).dataType == BinaryType) "ST_geomFromTWKB"
+      if (df.schema(geomColumn).dataType == BinaryType) ""
       else "ST_geomFromWKT"
 
     // view creation
