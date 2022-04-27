@@ -44,12 +44,14 @@ object OptimizeSpatial extends Serializable {
     // overwrite the output table
     try ssc.sql(s"DROP TABLE $outputTable;") catch { case _: AnalysisException => // e.printStackTrace() }*/
 
-    // view creation
-    // SQL definition is easier and more readable
+    // Decide, based on column type of geometry, which parsing function to use
     val table_df = ssc.table(sourceTable)
     val parseGeom =
       if (table_df.schema(geomColumn).dataType == "binary") "ST_geomFromTWKB"
       else "ST_geomFromWKT"
+
+    // view creation
+    // SQL definition is easier and more readable
     ssc.sql(
       s"""
         |CREATE TEMPORARY VIEW ${sourceTable}_idx_view AS(
