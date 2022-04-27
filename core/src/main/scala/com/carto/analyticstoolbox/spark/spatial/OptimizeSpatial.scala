@@ -19,6 +19,8 @@ package com.carto.analyticstoolbox.spark.spatial
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.catalyst.TableIdentifier
 import org.apache.spark.sql.hive.HiveContext
+import org.apache.spark.sql.types.BinaryType
+
 
 object OptimizeSpatial extends Serializable {
 
@@ -44,9 +46,9 @@ object OptimizeSpatial extends Serializable {
     try ssc.sql(s"DROP TABLE $outputTable;") catch { case _: AnalysisException => // e.printStackTrace() }*/
 
     // Decide, based on column type of geometry, which parsing function to use
-    val table_df = ssc.table(sourceTable)
+    val df = ssc.table(sourceTable)
     val parseGeom =
-      if (table_df.schema(geomColumn).dataType == "binary") "ST_geomFromTWKB"
+      if (df.schema(geomColumn).dataType == BinaryType) "ST_geomFromTWKB"
       else "ST_geomFromWKT"
 
     // view creation
@@ -57,15 +59,16 @@ object OptimizeSpatial extends Serializable {
          |  WITH orig_q AS (
          |    SELECT
          |      * EXCEPT($geomColumn),
-         |      $geomColumn AS wkt,
          |      $parseGeom($geomColumn) AS geom
          |      FROM $sourceTable
          |    )
          |    SELECT
          |      *,
-         |      st_extentFromGeom($geomColumn) AS __carto_index
+         |      st_z2LatLon(geom) AS __carto_z2,
+         |      st_extentFromGeom(geom) AS __carto_index,
+         |      st_partitionCentroid(geom, $zoom) AS __carto_partitioning
          |      FROM orig_q
-         |      DISTRIBUTE BY partitioning SORT BY z2.min, z2.max
+         |      DISTRIBUTE BY __carto_partitioning SORT BY __carto_z2.min, __carto_z2.max
          |  );
          |""".stripMargin
     )
@@ -86,7 +89,7 @@ object OptimizeSpatial extends Serializable {
       s"""
          |CREATE TABLE $outputTable
          |USING PARQUET LOCATION '$outputLocation/$outputTable'
-         |AS (SELECT * FROM ${sourceTable}_idx_view);
+         |AS (SELECT * EXCEPT (__carto_partitioning,  __carto_z2) FROM ${sourceTable}_idx_view);
          |""".stripMargin
     )
   }
