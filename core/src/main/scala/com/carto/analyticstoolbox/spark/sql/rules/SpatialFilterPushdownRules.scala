@@ -33,7 +33,6 @@ import org.log4s.getLogger
 
 import scala.util.{Failure, Success, Try}
 
-
 object SpatialFilterPushdownRules extends Rule[LogicalPlan] {
   @transient private[this] lazy val logger = getLogger
 
