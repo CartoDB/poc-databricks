@@ -90,7 +90,7 @@ cat > /dbfs/FileStore/carto/carto-init.sh <<'EOF'
 #
 # 
 # On cluster startup, this script will copy the CARTO jars to the cluster's default jar directory.
-# In order to activate CARTO ST_Intersection plan optimization: "com.carto.analyticstoolbox.spark.rules.sql.SpatialFilterPushdownRules"
+# In order to activate CARTO ST_Intersection plan optimization: "com.carto.analyticstoolbox.spark.sql.rules.SpatialFilterPushdownRules"
 
 cp /dbfs/FileStore/jars-carto/core-assembly-{version}.jar /databricks/jars
 
