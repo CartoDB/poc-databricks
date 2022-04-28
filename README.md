@@ -75,7 +75,7 @@ These scripts can be written using notebook cells:
 mkdir -p /dbfs/FileStore/jars-carto/
 
 # Download the dependencies from Maven into DBFS
-curl -o /dbfs/FileStore/jars-carto/ "https://github.com/CartoDB/analytics-toolbox-databricks/releases/download/v{version}/core-assembly-{version}.jar"
+curl -o /dbfs/FileStore/jars-carto/core-assembly-{version}.jar "https://github.com/CartoDB/analytics-toolbox-databricks/releases/download/v{version}/core-assembly-{version}.jar"
 ```
 
 ```bash
