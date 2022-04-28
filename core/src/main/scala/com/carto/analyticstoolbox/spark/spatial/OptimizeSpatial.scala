@@ -27,11 +27,11 @@ object OptimizeSpatial extends Serializable {
     sourceTable: String,
     outputTable: String,
     outputLocation: String,
+    geomColumn: String,
     zoom: Int,
     computeBlockSize: String => Long,
     compression: String,
-    maxRecordsPerFile: Int,
-    geomColumn: String
+    maxRecordsPerFile: Int
   )(implicit ssc: SparkSession): Unit = {
     // drop tmp views, IF NOT EXISTS is not supported by Spark SQL, that's a DataBricks feature
     // using try catch to capture
@@ -99,11 +99,11 @@ object OptimizeSpatial extends Serializable {
     sourceTable: String,
     outputTable: String,
     outputLocation: String,
+    geomColumn: String,
     zoom: Int,
     blockSizeDefault: Int,
     compression: String,
-    maxRecordsPerFile: Int,
-    geomColumn: String
+    maxRecordsPerFile: Int
   )(implicit ssc: SparkSession): Unit =
     apply(
       sourceTable,
@@ -118,9 +118,9 @@ object OptimizeSpatial extends Serializable {
 
   /** TODO: improve heuristic */
   def blockSizeCompute(table: String, blockSizeDefault: Int)(implicit ssc: SparkSession): Long = {
-    val df  = ssc.sql(s"SELECT partitioning FROM $table LIMIT 10;")
+    val df  = ssc.sql(s"SELECT __carto_partitioning FROM $table LIMIT 10;")
     val p   = df.take(1).map(_.getLong(0)).headOption.getOrElse(0)
-    val dfc = ssc.sql(s"SELECT COUNT(*) FROM $table WHERE partitioning = $p;")
+    val dfc = ssc.sql(s"SELECT COUNT(*) FROM $table WHERE __carto_partitioning = $p;")
 
     math.max(dfc.head.getLong(0) * 10 / 2, blockSizeDefault)
   }

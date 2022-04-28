@@ -24,8 +24,8 @@ package object spatial extends Serializable {
       sourceTable: String,
       outputTable: String,
       outputLocation: String,
-      zoom: Int,
-      blockSizeDefault: Int = 2097000,
+      zoom: Int = 8,
+      blockSizeDefault: Long = 2097000,
       compression: String = "lz4",
       maxRecordsPerFile: Int = 0,
       geomColumn: String = "geom"
