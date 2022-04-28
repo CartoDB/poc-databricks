@@ -80,9 +80,10 @@ curl -L -o /dbfs/FileStore/jars-carto/core-assembly-{version}.jar "https://githu
 
 ```bash
 %sh 
+rm -rf /dbfs/FileStore/jars-carto
 
-# Create init script directory for CARTO
-mkdir -p /dbfs/FileStore/carto/
+# Create JAR directory for CARTO
+mkdir -p /dbfs/FileStore/jars-carto/
 
 # Create init script
 cat > /dbfs/FileStore/carto/carto-init.sh <<'EOF'
