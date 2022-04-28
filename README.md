@@ -50,9 +50,9 @@ val outputTable: String = ???
 val outputLocation: String = ???
 
 // optimize with the block size computation 
-spark.optimizeSpatialAuto(sourceTable, outputTable, outputLocation)
+spark.optimizeSpatial(sourceTable, outputTable, outputLocation, geomColumn = "bbox")
 // optimize with the user defined block size
-spark.optimizeSpatial(sourceTable, outputTable, outputLocation, blockSize = 20097000)
+spark.optimizeSpatialManual(sourceTable, outputTable, outputLocation, geomColumn = "bbox", blockSize = 20097000)
 ```
 
 ### Enabling CARTO Query Optimizations on Databricks
