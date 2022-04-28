@@ -24,11 +24,11 @@ package object spatial extends Serializable {
       sourceTable: String,
       outputTable: String,
       outputLocation: String,
+      geomColumn: String = "geom",
       zoom: Int = 8,
       blockSizeDefault: Long = 2097000,
       compression: String = "lz4",
-      maxRecordsPerFile: Int = 0,
-      geomColumn: String = "geom"
-    ): Unit = OptimizeSpatial(sourceTable, outputTable, outputLocation, zoom, blockSizeDefault, compression, maxRecordsPerFile, geomColumn)(ssc)
+      maxRecordsPerFile: Int = 0
+    ): Unit = OptimizeSpatial(sourceTable, outputTable, outputLocation, geomColumn, zoom, blockSizeDefault, compression, maxRecordsPerFile)(ssc)
   }
 }

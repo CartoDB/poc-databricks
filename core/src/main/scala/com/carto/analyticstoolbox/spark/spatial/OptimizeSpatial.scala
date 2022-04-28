@@ -101,7 +101,7 @@ object OptimizeSpatial extends Serializable {
     outputLocation: String,
     geomColumn: String,
     zoom: Int,
-    blockSizeDefault: Int,
+    blockSizeDefault: Long,
     compression: String,
     maxRecordsPerFile: Int
   )(implicit ssc: SparkSession): Unit =
@@ -109,15 +109,15 @@ object OptimizeSpatial extends Serializable {
       sourceTable,
       outputTable,
       outputLocation,
+      geomColumn,
       zoom,
       computeBlockSize = t => blockSizeCompute(t, blockSizeDefault),
       compression,
-      maxRecordsPerFile,
-      geomColumn
+      maxRecordsPerFile
     )
 
   /** TODO: improve heuristic */
-  def blockSizeCompute(table: String, blockSizeDefault: Int)(implicit ssc: SparkSession): Long = {
+  def blockSizeCompute(table: String, blockSizeDefault: Long)(implicit ssc: SparkSession): Long = {
     val df  = ssc.sql(s"SELECT __carto_partitioning FROM $table LIMIT 10;")
     val p   = df.take(1).map(_.getLong(0)).headOption.getOrElse(0)
     val dfc = ssc.sql(s"SELECT COUNT(*) FROM $table WHERE __carto_partitioning = $p;")
