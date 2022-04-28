@@ -33,6 +33,7 @@ CREATE OR REPLACE FUNCTION st_geoHash as 'com.carto.analyticstoolbox.core.ST_Geo
 CREATE OR REPLACE FUNCTION st_geomFromGeoHash as 'com.carto.analyticstoolbox.core.ST_GeomFromGeoHash';
 CREATE OR REPLACE FUNCTION st_geomFromGeoJson as 'com.carto.analyticstoolbox.core.ST_GeomFromGeoJson';
 CREATE OR REPLACE FUNCTION st_geometryFromText as 'com.carto.analyticstoolbox.core.ST_GeomFromWKT';
+CREATE OR REPLACE FUNCTION st_geomFromTWKB as 'com.carto.analyticstoolbox.core.ST_GeomFromTWKB';
 CREATE OR REPLACE FUNCTION st_geomFromWKB as 'com.carto.analyticstoolbox.core.ST_GeomFromWKB';
 CREATE OR REPLACE FUNCTION st_geomFromWKT as 'com.carto.analyticstoolbox.core.ST_GeomFromWKT';
 CREATE OR REPLACE FUNCTION st_geometryN as 'com.carto.analyticstoolbox.core.ST_GeometryN';

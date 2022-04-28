@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Azavea
+ * Copyright 2021 Azavea
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.carto.analyticstoolbox.spark.sql
+package com.carto.analyticstoolbox.core
 
-import com.carto.analyticstoolbox.spark.sql.rules.SpatialFilterPushdownRules
-import org.apache.spark.sql.SparkSessionExtensions
+import com.azavea.hiveless.HUDF
+import com.azavea.hiveless.spatial.util.TWKBUtils
+import org.locationtech.jts.geom.Geometry
 
-class SpatialFilterPushdownOptimizations extends (SparkSessionExtensions => Unit) {
-  def apply(e: SparkSessionExtensions): Unit = e.injectOptimizerRule { _ =>
-    SpatialFilterPushdownRules
-  }
+class ST_GeomFromTWKB extends HUDF[Array[Byte], Geometry] {
+  val name: String = "st_geomFromTWKB"
+  def function     = TWKBUtils.read
 }

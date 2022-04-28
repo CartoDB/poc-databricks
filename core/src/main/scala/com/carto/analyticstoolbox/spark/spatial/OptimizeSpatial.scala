@@ -16,8 +16,10 @@
 
 package com.carto.analyticstoolbox.spark.spatial
 
-import org.apache.spark.sql.catalyst.TableIdentifier
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.catalyst.TableIdentifier
+import org.apache.spark.sql.hive.HiveContext
+import org.apache.spark.sql.types.BinaryType
 
 object OptimizeSpatial extends Serializable {
 
@@ -25,6 +27,7 @@ object OptimizeSpatial extends Serializable {
     sourceTable: String,
     outputTable: String,
     outputLocation: String,
+    geomColumn: String,
     zoom: Int,
     computeBlockSize: String => Long,
     compression: String,
@@ -42,6 +45,12 @@ object OptimizeSpatial extends Serializable {
     // overwrite the output table
     try ssc.sql(s"DROP TABLE $outputTable;") catch { case _: AnalysisException => // e.printStackTrace() }*/
 
+    // Decide, based on column type of geometry, which parsing function to use
+    val df = ssc.table(sourceTable)
+    val parseGeom =
+      if (df.schema(geomColumn).dataType == BinaryType) ""
+      else "ST_geomFromWKT"
+
     // view creation
     // SQL definition is easier and more readable
     ssc.sql(
@@ -49,18 +58,17 @@ object OptimizeSpatial extends Serializable {
          |CREATE TEMPORARY VIEW ${sourceTable}_idx_view AS(
          |  WITH orig_q AS (
          |    SELECT
-         |      * EXCEPT(geom),
-         |      geom AS wkt,
-         |      ST_geomFromWKT(geom) AS geom
+         |      * EXCEPT($geomColumn),
+         |      $parseGeom($geomColumn) AS geom
          |      FROM $sourceTable
          |    )
          |    SELECT
          |      *,
-         |      st_z2LatLon(geom) AS z2,
-         |      st_extentFromGeom(geom) AS bbox,
-         |      st_partitionCentroid(geom, $zoom) AS partitioning
+         |      st_z2LatLon(geom) AS __carto_z2,
+         |      st_extentFromGeom(geom) AS __carto_index,
+         |      st_partitionCentroid(geom, $zoom) AS __carto_partitioning
          |      FROM orig_q
-         |      DISTRIBUTE BY partitioning SORT BY z2.min, z2.max
+         |      DISTRIBUTE BY __carto_partitioning SORT BY __carto_z2.min, __carto_z2.max
          |  );
          |""".stripMargin
     )
@@ -81,18 +89,19 @@ object OptimizeSpatial extends Serializable {
       s"""
          |CREATE TABLE $outputTable
          |USING PARQUET LOCATION '$outputLocation/$outputTable'
-         |AS (SELECT * FROM ${sourceTable}_idx_view);
+         |AS (SELECT * EXCEPT (__carto_partitioning,  __carto_z2) FROM ${sourceTable}_idx_view);
          |""".stripMargin
     )
   }
 
   /** automatically computes the block size */
-  def auto(
+  def apply(
     sourceTable: String,
     outputTable: String,
     outputLocation: String,
+    geomColumn: String,
     zoom: Int,
-    blockSizeDefault: Int,
+    blockSizeDefault: Long,
     compression: String,
     maxRecordsPerFile: Int
   )(implicit ssc: SparkSession): Unit =
@@ -100,6 +109,7 @@ object OptimizeSpatial extends Serializable {
       sourceTable,
       outputTable,
       outputLocation,
+      geomColumn,
       zoom,
       computeBlockSize = t => blockSizeCompute(t, blockSizeDefault),
       compression,
@@ -107,10 +117,10 @@ object OptimizeSpatial extends Serializable {
     )
 
   /** TODO: improve heuristic */
-  def blockSizeCompute(table: String, blockSizeDefault: Int)(implicit ssc: SparkSession): Long = {
-    val df  = ssc.sql(s"SELECT partitioning FROM $table LIMIT 10;")
+  def blockSizeCompute(table: String, blockSizeDefault: Long)(implicit ssc: SparkSession): Long = {
+    val df  = ssc.sql(s"SELECT __carto_partitioning FROM $table LIMIT 10;")
     val p   = df.take(1).map(_.getLong(0)).headOption.getOrElse(0)
-    val dfc = ssc.sql(s"SELECT COUNT(*) FROM $table WHERE partitioning = $p;")
+    val dfc = ssc.sql(s"SELECT COUNT(*) FROM $table WHERE __carto_partitioning = $p;")
 
     math.max(dfc.head.getLong(0) * 10 / 2, blockSizeDefault)
   }
