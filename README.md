@@ -37,9 +37,9 @@ The full list of supported functions can be found [here](./core/sql/createUDFs.s
 There are two functions defined to help with the raw table preparations. Both transform the input table 
 into a shape optimized for intersection queries; for more details see [OptimizeSpatial.scala](./core/src/main/scala/com/carto/analyticstoolbox/spark/spatial/OptimizeSpatial.scala):
 
-1. **optimizeSpatialAuto**
+1. **optimizeSpatial**
    * Uses heuristics to compute the optimal parquet block size
-2. **optimizeSpatial**
+2. **optimizeSpatialManual**
    * Uses the user input to set the output parquet file block size
 
 ```scala
