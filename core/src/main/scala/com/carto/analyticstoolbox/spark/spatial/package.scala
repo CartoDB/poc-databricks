@@ -30,5 +30,16 @@ package object spatial extends Serializable {
       compression: String = "lz4",
       maxRecordsPerFile: Int = 0
     ): Unit = OptimizeSpatial(sourceTable, outputTable, outputLocation, geomColumn, zoom, blockSizeDefault, compression, maxRecordsPerFile)(ssc)
+
+    def optimizeSpatialManual(
+      sourceTable: String,
+      outputTable: String,
+      outputLocation: String,
+      geomColumn: String = "geom",
+      zoom: Int = 8,
+      blockSize: Long = 2097000,
+      compression: String = "lz4",
+      maxRecordsPerFile: Int = 0
+    ): Unit = OptimizeSpatial(sourceTable, outputTable, outputLocation, geomColumn, zoom, _ => blockSize, compression, maxRecordsPerFile)(ssc)
   }
 }
