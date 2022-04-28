@@ -67,7 +67,17 @@ First, write a script to DBFS which can be used to copy jars from
 [the default class path](https://kb.databricks.com/libraries/replace-default-jar-new-jar.html)
 cluster directory on master.
 
-This script can be written using a notebook cell:
+These scripts can be written using notebook cells:
+
+```bash
+%sh 
+# Create JAR directory for Sedona
+mkdir -p /dbfs/FileStore/jars-carto/
+
+# Download the dependencies from Maven into DBFS
+curl -o /dbfs/FileStore/jars-carto/ "https://github.com/CartoDB/analytics-toolbox-databricks/releases/download/v{version}/core-assembly-{version}.jar"
+```
+
 ```bash
 %sh 
 
@@ -82,12 +92,12 @@ cat > /dbfs/FileStore/carto/carto-init.sh <<'EOF'
 # On cluster startup, this script will copy the CARTO jars to the cluster's default jar directory.
 # In order to activate CARTO ST_Intersection plan optimization: "com.carto.analyticstoolbox.spark.rules.sql.SpatialFilterPushdownRules"
 
-cp /dbfs/FileStore/jars/maven/com/carto/analyticstoolbox/*<version>.jar /databricks/jars
+cp /dbfs/FileStore/jars-carto/core-assembly-{version}.jar /databricks/jars
 
 EOF
 ```
 
-Where `/dbfs/FileStore/jars/maven/com/carto/analyticstoolbox/*<version>.jar` is a path to the installed CARTO Analytics Toolbox
+Where `/dbfs/FileStore/jars-carto/core-assembly-{version}.jar` is a path to the installed CARTO Analytics Toolbox
 package of a certain version.
 
 #### Update Cluster Configuration
