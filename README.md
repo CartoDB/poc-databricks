@@ -71,6 +71,8 @@ These scripts can be written using notebook cells:
 
 ```bash
 %sh 
+rm -rf /dbfs/FileStore/jars-carto
+
 # Create JAR directory for CARTO Analytics Toolbox
 mkdir -p /dbfs/FileStore/jars-carto/
 
@@ -80,10 +82,10 @@ curl -L -o /dbfs/FileStore/jars-carto/core-assembly-{version}.jar "https://githu
 
 ```bash
 %sh 
-rm -rf /dbfs/FileStore/jars-carto
+rm -rf /dbfs/FileStore/carto/
 
 # Create JAR directory for CARTO
-mkdir -p /dbfs/FileStore/jars-carto/
+mkdir -p /dbfs/FileStore/carto/
 
 # Create init script
 cat > /dbfs/FileStore/carto/carto-init.sh <<'EOF'
