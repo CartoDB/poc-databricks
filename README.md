@@ -71,7 +71,7 @@ These scripts can be written using notebook cells:
 
 ```bash
 %sh 
-# Create JAR directory for CARTO
+# Create JAR directory for CARTO Analytics Toolbox
 mkdir -p /dbfs/FileStore/jars-carto/
 
 # Download the dependencies from Maven into DBFS
