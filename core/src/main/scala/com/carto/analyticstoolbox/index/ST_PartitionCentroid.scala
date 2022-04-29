@@ -25,8 +25,7 @@ import geotrellis.proj4.{CRS, LatLng}
 import geotrellis.store.index.zcurve.Z2
 
 class ST_PartitionCentroid extends HUDF[(Geometry, Int, Option[Int], Option[Int], Option[CRS], Option[Double]), Long] {
-  val name: String = "st_partitionCentroid"
-  def function     = ST_PartitionCentroid.function
+  def function = ST_PartitionCentroid.function
 }
 
 object ST_PartitionCentroid {

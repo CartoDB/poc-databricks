@@ -23,6 +23,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_IsSimple extends HUDF[Geometry, jl.Boolean] {
-  val name: String = "st_isSimple"
-  def function     = GeometricAccessorFunctions.ST_IsSimple
+  def function = GeometricAccessorFunctions.ST_IsSimple
 }

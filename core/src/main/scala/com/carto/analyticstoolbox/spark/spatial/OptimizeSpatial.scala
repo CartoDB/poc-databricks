@@ -18,7 +18,6 @@ package com.carto.analyticstoolbox.spark.spatial
 
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.catalyst.TableIdentifier
-import org.apache.spark.sql.hive.HiveContext
 import org.apache.spark.sql.types.BinaryType
 
 object OptimizeSpatial extends Serializable {

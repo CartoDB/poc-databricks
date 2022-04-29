@@ -22,6 +22,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricConstructorFunctions
 import org.locationtech.jts.geom.Point
 
 class ST_PointFromGeoHash extends HUDF[(String, Int), Point] {
-  val name: String = "st_pointFromGeoHash"
-  def function     = GeometricConstructorFunctions.ST_PointFromGeoHash
+  def function = GeometricConstructorFunctions.ST_PointFromGeoHash
 }

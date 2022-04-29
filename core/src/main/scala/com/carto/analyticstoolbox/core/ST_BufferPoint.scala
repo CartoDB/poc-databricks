@@ -22,6 +22,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricProcessingFunctions
 import org.locationtech.jts.geom.{Geometry, Point}
 
 class ST_BufferPoint extends HUDF[(Point, Double), Geometry] {
-  val name: String = "st_bufferPoint"
-  def function     = GeometricProcessingFunctions.ST_BufferPoint
+  def function = GeometricProcessingFunctions.ST_BufferPoint
 }

@@ -16,7 +16,6 @@
 
 package com.carto.analyticstoolbox.core
 
-import com.carto.analyticstoolbox.core._
 import com.carto.analyticstoolbox.index._
 
 import com.azavea.hiveless.HUDF
@@ -26,8 +25,7 @@ import geotrellis.vector._
 import shapeless._
 
 class ST_Intersects extends HUDF[(ST_Intersects.Arg, ST_Intersects.Arg), Boolean] {
-  val name: String = "st_intersects"
-  def function     = ST_Intersects.function
+  def function = ST_Intersects.function
 }
 
 object ST_Intersects {

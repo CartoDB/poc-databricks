@@ -24,6 +24,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_RelateBool extends HUDF[(Geometry, Geometry, String), jl.Boolean] {
-  val name: String = "st_relateBool"
-  def function     = SpatialRelationFunctions.ST_RelateBool
+  def function = SpatialRelationFunctions.ST_RelateBool
 }

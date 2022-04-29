@@ -21,6 +21,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricCastFunctions
 import org.locationtech.jts.geom.{Geometry, Point}
 
 class ST_CastToPoint extends HUDF[Geometry, Point] {
-  val name: String = "st_castToPoint"
-  def function     = GeometricCastFunctions.ST_CastToPoint
+  def function = GeometricCastFunctions.ST_CastToPoint
 }

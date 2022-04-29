@@ -22,6 +22,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricConstructorFunctions
 import org.locationtech.jts.geom.Point
 
 class ST_MakePoint extends HUDF[(Double, Double), Point] {
-  val name: String = "st_makePoint"
-  def function     = GeometricConstructorFunctions.ST_MakePoint
+  def function = GeometricConstructorFunctions.ST_MakePoint
 }

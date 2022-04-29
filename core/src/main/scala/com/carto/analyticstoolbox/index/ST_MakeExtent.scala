@@ -21,6 +21,5 @@ import geotrellis.vector.Extent
 import com.azavea.hiveless.implicits.tupler._
 
 class ST_MakeExtent extends HUDF[(Double, Double, Double, Double), Extent] {
-  val name: String = "st_makeExtent"
-  def function     = Extent.apply
+  def function = Extent.apply
 }

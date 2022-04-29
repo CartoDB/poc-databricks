@@ -20,6 +20,5 @@ import com.azavea.hiveless.HUDF
 import org.locationtech.geomesa.spark.jts.udf.GeometricCastFunctions
 
 class ST_ByteArray extends HUDF[String, Array[Byte]] {
-  val name: String = "st_byteArray"
-  def function     = GeometricCastFunctions.ST_ByteArray
+  def function = GeometricCastFunctions.ST_ByteArray
 }

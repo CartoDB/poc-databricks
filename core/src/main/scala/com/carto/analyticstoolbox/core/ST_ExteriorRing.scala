@@ -21,6 +21,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricAccessorFunctions
 import org.locationtech.jts.geom.Geometry
 
 class ST_ExteriorRing extends HUDF[Geometry, Geometry] {
-  val name: String = "st_exteriorRing"
-  def function     = GeometricAccessorFunctions.ST_ExteriorRing
+  def function = GeometricAccessorFunctions.ST_ExteriorRing
 }

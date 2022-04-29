@@ -24,6 +24,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_Equals extends HUDF[(Geometry, Geometry), jl.Boolean] {
-  val name: String = "st_equals"
-  def function     = SpatialRelationFunctions.ST_Equals
+  def function = SpatialRelationFunctions.ST_Equals
 }

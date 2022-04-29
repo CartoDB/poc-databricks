@@ -21,6 +21,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricOutputFunctions
 import org.locationtech.jts.geom.Geometry
 
 class ST_AsText extends HUDF[Geometry, String] {
-  val name: String = "st_asText"
-  def function     = GeometricOutputFunctions.ST_AsText
+  def function = GeometricOutputFunctions.ST_AsText
 }

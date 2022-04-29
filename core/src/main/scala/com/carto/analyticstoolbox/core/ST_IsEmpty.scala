@@ -23,6 +23,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_IsEmpty extends HUDF[Geometry, jl.Boolean] {
-  val name: String = "st_isEmpty"
-  def function     = GeometricAccessorFunctions.ST_IsEmpty
+  def function = GeometricAccessorFunctions.ST_IsEmpty
 }

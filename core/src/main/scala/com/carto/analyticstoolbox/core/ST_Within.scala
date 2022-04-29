@@ -24,6 +24,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_Within extends HUDF[(Geometry, Geometry), jl.Boolean] {
-  val name: String = "st_within"
-  def function     = SpatialRelationFunctions.ST_Within
+  def function = SpatialRelationFunctions.ST_Within
 }

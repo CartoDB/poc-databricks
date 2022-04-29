@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Azavea
+ * Copyright 2022 Azavea
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,31 @@
 
 package com.carto.analyticstoolbox.core
 
+import com.carto.analyticstoolbox.index._
+
 import com.azavea.hiveless.HUDF
 import com.azavea.hiveless.implicits.tupler._
-import org.locationtech.geomesa.spark.jts.udf.SpatialRelationFunctions
-import org.locationtech.jts.geom.Geometry
+import com.azavea.hiveless.serializers.HDeserializer.Errors.ProductDeserializationError
+import geotrellis.vector._
+import shapeless._
 
-import java.{lang => jl}
+class ST_Contains extends HUDF[(ST_Contains.Arg, ST_Contains.Arg), Boolean] {
+  def function = ST_Contains.function
+}
 
-class ST_Contains extends HUDF[(Geometry, Geometry), jl.Boolean] {
-  val name: String = "st_contains"
-  def function     = SpatialRelationFunctions.ST_Contains
+object ST_Contains {
+  // We could use Either[Extent, Geometry], but Either has no safe fall back CNil
+  // which may lead to derivation error messages rather than parsing
+  type Arg = Extent :+: Geometry :+: CNil
+
+  def parseGeometry(a: Arg): Option[Geometry] = a.select[Geometry].orElse(a.select[Extent].map(_.toPolygon()))
+
+  private def parseGeometryUnsafe(a: Arg, aname: String): Geometry =
+    parseGeometry(a).getOrElse(throw ProductDeserializationError[ST_Contains, Arg](aname))
+
+  def function(left: Arg, right: Arg): Boolean = {
+    val (l, r) = (parseGeometryUnsafe(left, "first"), parseGeometryUnsafe(right, "second"))
+
+    l.contains(r)
+  }
 }

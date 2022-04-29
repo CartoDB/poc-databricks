@@ -21,6 +21,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricConstructorFunctions
 import org.locationtech.jts.geom.{LineString, Point}
 
 class ST_MakeLine extends HUDF[Array[Point], LineString] {
-  val name: String = "st_makeLine"
-  def function     = array => GeometricConstructorFunctions.ST_MakeLine(array)
+  def function = array => GeometricConstructorFunctions.ST_MakeLine(array)
 }

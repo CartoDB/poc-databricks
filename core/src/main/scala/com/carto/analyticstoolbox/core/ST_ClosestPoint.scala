@@ -22,6 +22,5 @@ import org.locationtech.geomesa.spark.jts.udf.SpatialRelationFunctions
 import org.locationtech.jts.geom.{Geometry, Point}
 
 class ST_ClosestPoint extends HUDF[(Geometry, Geometry), Point] {
-  val name: String = "st_closestPoint"
-  def function     = SpatialRelationFunctions.ST_ClosestPoint
+  def function = SpatialRelationFunctions.ST_ClosestPoint
 }

@@ -21,6 +21,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricConstructorFunctions
 import org.locationtech.jts.geom.{LineString, Polygon}
 
 class ST_MakePolygon extends HUDF[LineString, Polygon] {
-  val name: String = "st_makePolygon"
-  def function     = GeometricConstructorFunctions.ST_MakePolygon
+  def function = GeometricConstructorFunctions.ST_MakePolygon
 }

@@ -22,6 +22,5 @@ import org.locationtech.geomesa.spark.jts.udf.SpatialRelationFunctions
 import org.locationtech.jts.geom.Geometry
 
 class ST_Relate extends HUDF[(Geometry, Geometry), String] {
-  val name: String = "st_relate"
-  def function     = SpatialRelationFunctions.ST_Relate
+  def function = SpatialRelationFunctions.ST_Relate
 }

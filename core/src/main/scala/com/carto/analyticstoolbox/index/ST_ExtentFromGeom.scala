@@ -22,6 +22,5 @@ import com.azavea.hiveless.HUDF
 import geotrellis.vector._
 
 class ST_ExtentFromGeom extends HUDF[Geometry, Extent] {
-  val name: String = "st_extentFromGeom"
-  def function     = _.extent
+  def function = _.extent
 }

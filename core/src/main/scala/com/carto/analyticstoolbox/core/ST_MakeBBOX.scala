@@ -22,6 +22,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricConstructorFunctions
 import org.locationtech.jts.geom.Geometry
 
 class ST_MakeBBOX extends HUDF[(Double, Double, Double, Double), Geometry] {
-  val name: String = "st_makeBBOX"
-  def function     = GeometricConstructorFunctions.ST_MakeBBOX
+  def function = GeometricConstructorFunctions.ST_MakeBBOX
 }

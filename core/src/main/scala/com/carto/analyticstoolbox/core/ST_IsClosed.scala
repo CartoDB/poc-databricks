@@ -23,6 +23,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_IsClosed extends HUDF[Geometry, jl.Boolean] {
-  val name: String = "st_isClosed"
-  def function     = GeometricAccessorFunctions.ST_IsClosed
+  def function = GeometricAccessorFunctions.ST_IsClosed
 }
