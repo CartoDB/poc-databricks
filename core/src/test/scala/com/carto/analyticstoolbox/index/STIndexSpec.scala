@@ -119,7 +119,7 @@ class STIndexSpec extends AnyFunSpec with HiveTestEnvironment with TestTables {
       val dfe = ssc.sql(
         """
           |SELECT * FROM polygons_parquet
-          WHERE isNotNull(bbox)
+          |WHERE isNotNull(bbox)
           |AND ((((bbox.xmin >= -75.5859375)
           |OR bbox.ymin >= 40.3251777)
           |OR bbox.xmax <= -72.4101562)
@@ -146,7 +146,7 @@ class STIndexSpec extends AnyFunSpec with HiveTestEnvironment with TestTables {
       val dfe = ssc.sql(
         """
           |SELECT * FROM polygons_parquet
-          WHERE isNotNull(bbox)
+          |WHERE isNotNull(bbox)
           |AND ((((bbox.xmin >= -75.5859375)
           |OR bbox.ymin >= 40.3251777)
           |OR bbox.xmax <= -72.4101562)
@@ -173,7 +173,7 @@ class STIndexSpec extends AnyFunSpec with HiveTestEnvironment with TestTables {
       val dfe = ssc.sql(
         """
           |SELECT * FROM polygons_parquet
-          WHERE isNotNull(bbox)
+          |WHERE isNotNull(bbox)
           |AND ((((bbox.xmin >= -75.5859375)
           |OR bbox.ymin >= 40.3251777)
           |OR bbox.xmax <= -72.4101562)
@@ -200,7 +200,7 @@ class STIndexSpec extends AnyFunSpec with HiveTestEnvironment with TestTables {
       val dfe = ssc.sql(
         """
           |SELECT * FROM polygons_parquet
-          WHERE isNotNull(bbox)
+          |WHERE isNotNull(bbox)
           |AND ((((bbox.xmin >= -75.5859375)
           |OR bbox.ymin >= 40.3251777)
           |OR bbox.xmax <= -72.4101562)
