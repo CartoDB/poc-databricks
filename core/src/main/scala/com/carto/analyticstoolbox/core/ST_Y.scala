@@ -23,6 +23,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_Y extends HUDF[Geometry, jl.Float] {
-  val name: String = "st_y"
-  def function     = GeometricAccessorFunctions.ST_Y
+  def function = GeometricAccessorFunctions.ST_Y
 }

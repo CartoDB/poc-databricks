@@ -23,6 +23,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_CoordDim extends HUDF[Geometry, jl.Integer] {
-  val name: String = "st_coordDim"
-  def function     = GeometricAccessorFunctions.ST_CoordDim
+  def function = GeometricAccessorFunctions.ST_CoordDim
 }

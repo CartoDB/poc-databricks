@@ -21,6 +21,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricConstructorFunctions
 import org.locationtech.jts.geom.MultiLineString
 
 class ST_MLineFromText extends HUDF[String, MultiLineString] {
-  val name: String = "st_mLineFromText"
-  def function     = GeometricConstructorFunctions.ST_MLineFromText
+  def function = GeometricConstructorFunctions.ST_MLineFromText
 }

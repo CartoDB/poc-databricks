@@ -22,6 +22,5 @@ import org.locationtech.jts.geom.Geometry
 import org.locationtech.jts.simplify.TopologyPreservingSimplifier
 
 class ST_SimplifyPreserveTopology extends HUDF[(Geometry, Double), Geometry] {
-  val name: String = "st_simplifyPreserveTopology"
-  def function     = { (g: Geometry, p: Double) => TopologyPreservingSimplifier.simplify(g, p) }
+  def function = { (g: Geometry, p: Double) => TopologyPreservingSimplifier.simplify(g, p) }
 }

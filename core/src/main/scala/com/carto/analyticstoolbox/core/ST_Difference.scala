@@ -22,6 +22,5 @@ import org.locationtech.geomesa.spark.jts.udf.SpatialRelationFunctions
 import org.locationtech.jts.geom.Geometry
 
 class ST_Difference extends HUDF[(Geometry, Geometry), Geometry] {
-  val name: String = "st_difference"
-  def function     = SpatialRelationFunctions.ST_Difference
+  def function = SpatialRelationFunctions.ST_Difference
 }

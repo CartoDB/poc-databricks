@@ -21,6 +21,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricConstructorFunctions
 import org.locationtech.jts.geom.Point
 
 class ST_PointFromWKB extends HUDF[Array[Byte], Point] {
-  val name: String = "st_pointFromWKB"
-  def function     = GeometricConstructorFunctions.ST_PointFromWKB
+  def function = GeometricConstructorFunctions.ST_PointFromWKB
 }

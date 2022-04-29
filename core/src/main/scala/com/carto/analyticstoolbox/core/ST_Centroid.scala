@@ -21,6 +21,5 @@ import org.locationtech.geomesa.spark.jts.udf.SpatialRelationFunctions
 import org.locationtech.jts.geom.{Geometry, Point}
 
 class ST_Centroid extends HUDF[Geometry, Point] {
-  val name: String = "st_centroid"
-  def function     = SpatialRelationFunctions.ST_Centroid
+  def function = SpatialRelationFunctions.ST_Centroid
 }

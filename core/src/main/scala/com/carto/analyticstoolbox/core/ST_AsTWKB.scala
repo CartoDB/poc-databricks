@@ -21,6 +21,5 @@ import com.azavea.hiveless.spatial.util.TWKBUtils
 import org.locationtech.jts.geom.Geometry
 
 class ST_AsTWKB extends HUDF[Geometry, Array[Byte]] {
-  val name: String = "st_asTWKB"
-  def function     = TWKBUtils.write
+  def function = TWKBUtils.write
 }

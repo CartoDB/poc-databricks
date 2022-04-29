@@ -21,6 +21,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricConstructorFunctions
 import org.locationtech.jts.geom.Geometry
 
 class ST_GeomFromGeoJson extends HUDF[String, Geometry] {
-  val name: String = "st_geomFromGeoJSON"
-  def function     = GeometricConstructorFunctions.ST_GeomFromGeoJSON
+  def function = GeometricConstructorFunctions.ST_GeomFromGeoJSON
 }

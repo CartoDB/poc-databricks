@@ -23,8 +23,7 @@ import geotrellis.store.index.zcurve.Z2
 import geotrellis.vector.Geometry
 
 class ST_Z2LatLon extends HUDF[Geometry, Z2Index] {
-  val name: String = "st_z2LatLon"
-  def function     = ST_Z2LatLon.function
+  def function = ST_Z2LatLon.function
 }
 
 object ST_Z2LatLon {

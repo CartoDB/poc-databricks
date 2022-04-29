@@ -24,6 +24,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_Crosses extends HUDF[(Geometry, Geometry), jl.Boolean] {
-  val name: String = "st_crosses"
-  def function     = SpatialRelationFunctions.ST_Crosses
+  def function = SpatialRelationFunctions.ST_Crosses
 }

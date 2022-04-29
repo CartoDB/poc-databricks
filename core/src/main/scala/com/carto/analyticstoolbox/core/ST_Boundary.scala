@@ -21,6 +21,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricAccessorFunctions
 import org.locationtech.jts.geom.Geometry
 
 class ST_Boundary extends HUDF[Geometry, Geometry] {
-  val name: String = "st_boundary"
-  def function     = GeometricAccessorFunctions.ST_Boundary
+  def function = GeometricAccessorFunctions.ST_Boundary
 }

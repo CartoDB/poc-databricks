@@ -23,6 +23,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_IsValid extends HUDF[Geometry, jl.Boolean] {
-  val name: String = "st_isValid"
-  def function     = GeometricAccessorFunctions.ST_IsValid
+  def function = GeometricAccessorFunctions.ST_IsValid
 }

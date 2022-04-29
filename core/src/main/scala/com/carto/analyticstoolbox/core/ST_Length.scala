@@ -23,6 +23,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_Length extends HUDF[Geometry, jl.Double] {
-  val name: String = "st_length"
-  def function     = SpatialRelationFunctions.ST_Length
+  def function = SpatialRelationFunctions.ST_Length
 }

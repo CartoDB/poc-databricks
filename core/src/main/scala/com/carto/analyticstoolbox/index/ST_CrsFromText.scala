@@ -20,6 +20,5 @@ import com.azavea.hiveless.HUDF
 import geotrellis.proj4.CRS
 
 class ST_CrsFromText extends HUDF[String, CRS] {
-  val name: String = "st_crsFromText"
-  def function     = CRS.fromString
+  def function = CRS.fromString
 }

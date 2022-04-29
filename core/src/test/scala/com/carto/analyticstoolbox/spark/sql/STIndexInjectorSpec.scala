@@ -34,10 +34,11 @@ class STIndexInjectorSpec extends AnyFunSpec with InjectOptimizerTestEnvironment
       val dfe = ssc.sql(
         """
           |SELECT * FROM polygons_parquet
-          |WHERE bbox.xmin >= -75.5859375
-          |AND bbox.ymin >= 40.3251777
-          |AND bbox.xmax <= -72.4101562
-          |AND bbox.ymax <= 43.1971673
+          |WHERE isNotNull(bbox)
+          |AND (((bbox.xmin >= -75.5859375
+          |OR bbox.ymin >= 40.3251777)
+          |OR bbox.xmax <= -72.4101562)
+          |OR bbox.ymax <= 43.1971673)
           |AND ST_Intersects(bbox, ST_GeomFromGeoJSON('{"type":"Polygon","coordinates":[[[-75.5859375,40.32517767999294],[-75.5859375,43.197167282501276],[-72.41015625,43.197167282501276],[-72.41015625,40.32517767999294],[-75.5859375,40.32517767999294]]]}'))
           |""".stripMargin
       )

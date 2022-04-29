@@ -23,6 +23,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_IsCollection extends HUDF[Geometry, jl.Boolean] {
-  val name: String = "st_isCollection"
-  def function     = GeometricAccessorFunctions.ST_IsCollection
+  def function = GeometricAccessorFunctions.ST_IsCollection
 }

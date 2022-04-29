@@ -23,6 +23,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_NumPoints extends HUDF[Geometry, jl.Integer] {
-  val name: String = "st_numPoints"
-  def function     = GeometricAccessorFunctions.ST_NumPoints
+  def function = GeometricAccessorFunctions.ST_NumPoints
 }

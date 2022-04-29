@@ -24,6 +24,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_Disjoint extends HUDF[(Geometry, Geometry), jl.Boolean] {
-  val name: String = "st_disjoint"
-  def function     = SpatialRelationFunctions.ST_Disjoint
+  def function = SpatialRelationFunctions.ST_Disjoint
 }

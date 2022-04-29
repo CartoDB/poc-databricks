@@ -21,6 +21,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricOutputFunctions
 import org.locationtech.jts.geom.Geometry
 
 class ST_AsBinary extends HUDF[Geometry, Array[Byte]] {
-  val name: String = "st_asBinary"
-  def function     = GeometricOutputFunctions.ST_AsBinary
+  def function = GeometricOutputFunctions.ST_AsBinary
 }

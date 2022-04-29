@@ -24,6 +24,5 @@ import geotrellis.proj4.CRS
 import geotrellis.vector._
 
 class ST_GeomReproject extends HUDF[(Geometry, CRS, CRS), Geometry] {
-  val name: String = "st_geomReproject"
-  def function     = { (geom: Geometry, from: CRS, to: CRS) => geom.reproject(from, to) }
+  def function = { (geom: Geometry, from: CRS, to: CRS) => geom.reproject(from, to) }
 }

@@ -23,6 +23,5 @@ import org.locationtech.jts.geom.LineString
 import java.{lang => jl}
 
 class ST_LengthSphere extends HUDF[LineString, jl.Double] {
-  val name: String = "st_lengthSphere"
-  def function     = SpatialRelationFunctions.ST_LengthSphere
+  def function = SpatialRelationFunctions.ST_LengthSphere
 }

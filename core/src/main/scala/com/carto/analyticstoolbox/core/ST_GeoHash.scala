@@ -22,6 +22,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricOutputFunctions
 import org.locationtech.jts.geom.Geometry
 
 class ST_GeoHash extends HUDF[(Geometry, Int), String] {
-  val name: String = "st_geoHash"
-  def function     = GeometricOutputFunctions.ST_GeoHash
+  def function = GeometricOutputFunctions.ST_GeoHash
 }

@@ -22,6 +22,5 @@ import org.locationtech.jts.geom.Geometry
 import org.locationtech.jts.simplify.DouglasPeuckerSimplifier
 
 class ST_Simplify extends HUDF[(Geometry, Double), Geometry] {
-  val name: String = "st_simplify"
-  def function     = { (g: Geometry, p: Double) => DouglasPeuckerSimplifier.simplify(g, p) }
+  def function = { (g: Geometry, p: Double) => DouglasPeuckerSimplifier.simplify(g, p) }
 }

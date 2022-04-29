@@ -21,6 +21,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricProcessingFunctions
 import org.locationtech.jts.geom.Geometry
 
 class ST_AntimeridianSafeGeom extends HUDF[Geometry, Geometry] {
-  val name: String = "st_antimeridianSafeGeom"
-  def function     = GeometricProcessingFunctions.ST_antimeridianSafeGeom
+  def function = GeometricProcessingFunctions.ST_antimeridianSafeGeom
 }

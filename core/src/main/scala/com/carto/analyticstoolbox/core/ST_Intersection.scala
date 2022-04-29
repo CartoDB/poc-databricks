@@ -22,6 +22,5 @@ import org.locationtech.geomesa.spark.jts.udf.SpatialRelationFunctions
 import org.locationtech.jts.geom.Geometry
 
 class ST_Intersection extends HUDF[(Geometry, Geometry), Geometry] {
-  val name: String = "st_intersection"
-  def function     = SpatialRelationFunctions.ST_Intersection
+  def function = SpatialRelationFunctions.ST_Intersection
 }

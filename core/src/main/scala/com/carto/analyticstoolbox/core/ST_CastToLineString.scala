@@ -21,6 +21,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricCastFunctions
 import org.locationtech.jts.geom.{Geometry, LineString}
 
 class ST_CastToLineString extends HUDF[Geometry, LineString] {
-  val name: String = "st_castToLineString"
-  def function     = GeometricCastFunctions.ST_CastToLineString
+  def function = GeometricCastFunctions.ST_CastToLineString
 }

@@ -24,6 +24,5 @@ import org.locationtech.jts.geom.Geometry
 import java.{lang => jl}
 
 class ST_DistanceSphere extends HUDF[(Geometry, Geometry), jl.Double] {
-  val name: String = "st_distanceSphere"
-  def function     = SpatialRelationFunctions.ST_DistanceSphere
+  def function = SpatialRelationFunctions.ST_DistanceSphere
 }

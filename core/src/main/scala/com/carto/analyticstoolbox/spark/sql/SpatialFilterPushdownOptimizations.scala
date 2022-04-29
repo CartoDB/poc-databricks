@@ -20,7 +20,5 @@ import com.carto.analyticstoolbox.spark.sql.rules.SpatialFilterPushdownRules
 import org.apache.spark.sql.SparkSessionExtensions
 
 class SpatialFilterPushdownOptimizations extends (SparkSessionExtensions => Unit) {
-  def apply(e: SparkSessionExtensions): Unit = e.injectOptimizerRule { _ =>
-    SpatialFilterPushdownRules
-  }
+  def apply(e: SparkSessionExtensions): Unit = e.injectOptimizerRule(_ => SpatialFilterPushdownRules)
 }

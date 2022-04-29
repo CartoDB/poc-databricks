@@ -21,6 +21,5 @@ import org.locationtech.geomesa.spark.jts.udf.GeometricConstructorFunctions
 import org.locationtech.jts.geom.MultiPolygon
 
 class ST_MPolyFromText extends HUDF[String, MultiPolygon] {
-  val name: String = "st_mPolyText"
-  def function     = GeometricConstructorFunctions.ST_MPolyFromText
+  def function = GeometricConstructorFunctions.ST_MPolyFromText
 }
