@@ -76,7 +76,7 @@ rm -rf /dbfs/FileStore/jars-carto
 # Create JAR directory for CARTO Analytics Toolbox
 mkdir -p /dbfs/FileStore/jars-carto/
 
-# Download the dependencies from Maven into DBFS
+# Download assembly har from GitHub into DBFS
 curl -L -o /dbfs/FileStore/jars-carto/core-assembly-{version}.jar "https://github.com/CartoDB/analytics-toolbox-databricks/releases/download/v{version}/core-assembly-{version}.jar"
 ```
 
