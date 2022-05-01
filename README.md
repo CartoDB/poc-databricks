@@ -32,7 +32,7 @@ CREATE OR REPLACE FUNCTION st_simplify as 'com.carto.analyticstoolbox.core.ST_Si
 
 The full list of supported functions can be found [here](./core/sql/createUDFs.sql).
 
-## Spatial UDFs plan optimizations
+## Spatial Query optimizations
 
 ```scala
 import com.carto.analyticstoolbox.spark.sql.rules.SpatialFilterPushdownRules
