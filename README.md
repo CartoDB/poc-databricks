@@ -34,14 +34,27 @@ The full list of supported functions can be found [here](./core/sql/createUDFs.s
 
 ## Spatial Query optimizations
 
+There are two types of supported optimizations: `ST_Intersects` and `ST_Contains`, which allow Spark to push down predicates when possible.
+
+To enable optimizations:
+
 ```scala
-import com.carto.analyticstoolbox.spark.sql.rules.SpatialFilterPushdownRules
+com.carto.analyticstoolbox.spark.sql.rules.SpatialFilterPushdownRules
 
 val spark: SparkSession = ???
 SpatialFilterPushdownRules.registerOptimizations(sparkContext.sqlContext)
 ```
 
-In case there is a need to have optimizations enabled on a cluster by default, follow [Enabling CARTO Query Optimizations on Databricks](#enabling-carto-query-optimizations-on-databricks) section.
+It is also possible to set it through the Spark configuration via the optimizations injector:
+
+```scala
+import com.carto.analyticstoolbox.spark.sql.SpatialFilterPushdownOptimizations
+
+val conf: SparkConfig = ???
+config.set("spark.sql.extensions", classOf[SpatialFilterPushdownOptimizations].getName)
+```
+
+In case there is a need to have optimizations enabled on a DataBricks cluster by default, follow [Enabling CARTO Query Optimizations on Databricks](#enabling-carto-query-optimizations-on-databricks) section.
 
 ## Table Optimization
 
