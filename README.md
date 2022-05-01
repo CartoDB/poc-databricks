@@ -32,6 +32,17 @@ CREATE OR REPLACE FUNCTION st_simplify as 'com.carto.analyticstoolbox.core.ST_Si
 
 The full list of supported functions can be found [here](./core/sql/createUDFs.sql).
 
+## Spatial UDFs plan optimizations
+
+```scala
+import com.carto.analyticstoolbox.spark.sql.rules.SpatialFilterPushdownRules
+
+val spark: SparkSession = ???
+SpatialFilterPushdownRules.registerOptimizations(sparkContext.sqlContext)
+```
+
+In case there is a need to have optimizations enabled on a cluster by default, follow [Enabling CARTO Query Optimizations on Databricks](#enabling-carto-query-optimizations-on-databricks) section.
+
 ## Table Optimization
 
 There are two functions defined to help with the raw table preparations. Both transform the input table 
