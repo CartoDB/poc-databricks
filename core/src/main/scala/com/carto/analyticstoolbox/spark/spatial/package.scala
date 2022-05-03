@@ -20,26 +20,28 @@ import org.apache.spark.sql.SparkSession
 
 package object spatial extends Serializable {
   implicit class SparkSessionOps(val ssc: SparkSession) extends AnyVal {
+    import OptimizeSpatial._
+
     def optimizeSpatial(
       sourceTable: String,
       outputTable: String,
-      outputLocation: String,
-      geomColumn: String = "geom",
-      zoom: Int = 8,
-      blockSizeDefault: Long = 2097000,
-      compression: String = "lz4",
-      maxRecordsPerFile: Int = 0
+      outputLocation: String = DEFAULT_OUTPUT_LOCATION,
+      geomColumn: String = DEFAULT_GEOM_COLUMN,
+      zoom: Int = DEFAULT_ZOOM,
+      blockSizeDefault: Long = DEFAULT_BLOCK_SIZE,
+      compression: String = DEFAULT_COMPRESSION,
+      maxRecordsPerFile: Int = DEFAULT_MAX_RECORDS_PER_FILE
     ): Unit = OptimizeSpatial(sourceTable, outputTable, outputLocation, geomColumn, zoom, blockSizeDefault, compression, maxRecordsPerFile)(ssc)
 
     def optimizeSpatialManual(
       sourceTable: String,
       outputTable: String,
-      outputLocation: String,
-      geomColumn: String = "geom",
-      zoom: Int = 8,
-      blockSize: Long = 2097000,
-      compression: String = "lz4",
-      maxRecordsPerFile: Int = 0
+      outputLocation: String = DEFAULT_OUTPUT_LOCATION,
+      geomColumn: String = DEFAULT_GEOM_COLUMN,
+      zoom: Int = DEFAULT_ZOOM,
+      blockSize: Long = DEFAULT_BLOCK_SIZE,
+      compression: String = DEFAULT_COMPRESSION,
+      maxRecordsPerFile: Int = DEFAULT_MAX_RECORDS_PER_FILE
     ): Unit = OptimizeSpatial(sourceTable, outputTable, outputLocation, geomColumn, zoom, _ => blockSize, compression, maxRecordsPerFile)(ssc)
   }
 }

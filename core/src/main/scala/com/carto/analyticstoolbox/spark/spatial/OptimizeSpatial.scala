@@ -21,7 +21,6 @@ import org.apache.spark.sql.catalyst.TableIdentifier
 import org.apache.spark.sql.types.BinaryType
 
 object OptimizeSpatial extends Serializable {
-
   def apply(
     sourceTable: String,
     outputTable: String,
@@ -123,4 +122,12 @@ object OptimizeSpatial extends Serializable {
 
     math.max(dfc.head.getLong(0) * 10 / 2, blockSizeDefault)
   }
+
+  /** Optimization function defaults. */
+  val DEFAULT_OUTPUT_LOCATION: String   = "/FileStore/tables/carto_default/"
+  val DEFAULT_GEOM_COLUMN: String       = "geom"
+  val DEFAULT_ZOOM: Int                 = 8
+  val DEFAULT_BLOCK_SIZE: Long          = 2097000
+  val DEFAULT_COMPRESSION: String       = "lz4"
+  val DEFAULT_MAX_RECORDS_PER_FILE: Int = 0
 }
