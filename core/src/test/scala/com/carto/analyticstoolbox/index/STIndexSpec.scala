@@ -244,4 +244,12 @@ class STIndexSpec extends AnyFunSpec with HiveTestEnvironment with TestTables {
 
     dfc shouldBe dfec
   }
+
+  it("H3_ToParent") {
+    val df = ssc.sql(s"SELECT H3_ToParent(617700169958293503, 7);")
+
+    // 0x872830828ffffffL shouldBe h3.h3ToParent(0x8928308280fffffL, 7)
+    // https://github.com/uber/h3-java/blob/f628b6e0fcbd330122ee80ef062b0d59b2450c00/src/test/java/com/uber/h3core/v3/TestHierarchy.java#L36
+    df.collect().head.getLong(0) shouldBe 0x872830828ffffffL
+  }
 }

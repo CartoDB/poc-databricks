@@ -10,6 +10,7 @@ val jtsVersion        = "1.18.1"
 val geomesaVersion    = "3.3.0"
 val hivelessVersion   = "0.0.12"
 val geotrellisVersion = "3.6.2"
+val h3Version         = "4.0.0-rc1"
 
 // GeoTrellis depends on Shapeless 2.3.7
 // To maintain better compat with Spark 3.1.x and DataBricks 9.1 we need to depend on Shapeless 2.3.3
@@ -101,6 +102,7 @@ lazy val core = project
       "com.azavea"               %% "hiveless-core"     % hivelessVersion,
       "com.azavea"               %% "hiveless-jts"      % hivelessVersion,
       "org.locationtech.geomesa" %% "geomesa-spark-jts" % geomesaVersion,
+      "com.uber"                  % "h3"                % h3Version,
       spark("hive").value         % Provided
     ) ++ Seq(
       "org.locationtech.geotrellis" %% "geotrellis-store"         % geotrellisVersion,
