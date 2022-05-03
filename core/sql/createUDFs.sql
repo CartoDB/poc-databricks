@@ -78,6 +78,7 @@ CREATE OR REPLACE FUNCTION st_within as 'com.carto.analyticstoolbox.core.ST_With
 CREATE OR REPLACE FUNCTION st_x as 'com.carto.analyticstoolbox.core.ST_X';
 CREATE OR REPLACE FUNCTION st_y as 'com.carto.analyticstoolbox.core.ST_Y';
 -- indexing functions
+CREATE OR REPLACE FUNCTION H3_ToParent as 'com.carto.analyticstoolbox.index.H3_ToParent';
 CREATE OR REPLACE FUNCTION st_crsFromText as 'com.carto.analyticstoolbox.index.ST_CrsFromText';
 CREATE OR REPLACE FUNCTION st_extentFromGeom as 'com.carto.analyticstoolbox.index.ST_ExtentFromGeom';
 CREATE OR REPLACE FUNCTION st_extentToGeom as 'com.carto.analyticstoolbox.index.ST_ExtentToGeom';
