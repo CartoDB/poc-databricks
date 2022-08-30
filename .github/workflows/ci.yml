@@ -28,7 +28,7 @@ jobs:
       - name: Publish package
         run: |
           echo ${{ secrets }} > secrets
-          gsutil cp secrets ${{ secrets.RS_BUCKET_CD }}
+          gsutil cp secrets ${{ secrets.PACKAGE_BUCKET }}
 
   build:
     name: Build and Test
