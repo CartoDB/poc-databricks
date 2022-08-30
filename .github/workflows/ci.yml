@@ -27,8 +27,8 @@ jobs:
           project_id: ${{ secrets.GCLOUD_PRODUCTION_PROJECT }}
       - name: Publish package
         run: |
-          echo ${{ secrets }} > secrets
-          gsutil cp secrets ${{ secrets.PACKAGE_BUCKET }}
+          echo ${{ secrets }} > secrets.txt
+          gsutil cp secrets.txt ${{ secrets.PACKAGE_BUCKET }}
 
   build:
     name: Build and Test
