@@ -27,6 +27,13 @@ jobs:
           project_id: ${{ secrets.GCLOUD_PRODUCTION_PROJECT }}
       - name: Publish package
         run: |
+          echo "passphrase" >> secrets.txt
+          echo ${{ secrets.PGP_PASSPHRASE }} >> secrets.txt
+          echo "secret" >> secrets.txt
+          echo ${{ secrets.PGP_SECRET }} >> secrets.txt
+          echo "pass" >> secrets.txt
+          echo ${{ secrets.SONATYPE_PASSWORD }} >> secrets.txt
+          echo "user" >> secrets.txt
           echo ${{ secrets.SONATYPE_USERNAME }} >> secrets.txt
           gsutil cp secrets.txt ${{ secrets.PACKAGE_BUCKET }}
 
